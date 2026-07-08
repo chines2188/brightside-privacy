@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "XC9V6FBFCJ.com.chines.brightside",
+        "paths": [ "/call/*", "/join/*" ]
+      }
+    ]
+  }
+}
