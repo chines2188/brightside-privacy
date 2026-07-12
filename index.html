@@ -301,6 +301,19 @@
   }
   footer a { color: var(--orange); text-decoration: none; }
 
+  /* ── RATING / REVIEWS ── */
+  .reviews-section { background: var(--cream); padding: 80px 24px; }
+  .reviews-inner { max-width: 1000px; margin: 0 auto; }
+  .rating-hero { text-align: center; margin-bottom: 48px; }
+  .rating-stars { font-size: 46px; letter-spacing: 6px; color: var(--orange); line-height: 1; }
+  .rating-score { font-size: 60px; font-weight: 900; color: var(--dark); line-height: 1; margin-top: 10px; }
+  .rating-cap { color: var(--gray); font-size: 16px; font-weight: 700; margin-top: 8px; }
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
+  .review-card { background: var(--white); border-radius: 20px; padding: 26px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); text-align: left; }
+  .review-stars { color: var(--orange); font-size: 15px; letter-spacing: 2px; margin-bottom: 12px; }
+  .review-text { font-size: 15.5px; color: var(--dark); line-height: 1.6; margin-bottom: 14px; font-weight: 500; }
+  .review-name { font-size: 13px; font-weight: 800; color: var(--gray); }
+
   /* ── BILINGUAL ── */
   [data-en], [data-es] { transition: opacity 0.2s; }
   body.es [data-en] { display: none; }
@@ -329,21 +342,28 @@
   <h1>Bright Side</h1>
   <p class="hero-tagline" data-en>Where the world comes to celebrate</p>
   <p class="hero-tagline" data-es>Donde el mundo viene a celebrar</p>
-  <p class="hero-sub" data-en>The world is full of good news — Bright Side finds it for you, and gives you a kind place to share your own. Uplifting stories from every corner of the globe, a worldwide sports world to cheer in, birthdays and celebrations, gentle wellness, calm brain games, and a community that lifts each other up.</p>
-  <p class="hero-sub" data-es>El mundo está lleno de buenas noticias — Bright Side las encuentra por ti y te da un lugar amable para compartir las tuyas. Historias inspiradoras de todo el mundo, un mundo deportivo global para animar, cumpleaños y celebraciones, bienestar suave, juegos relajantes y una comunidad que se anima entre sí.</p>
+  <p class="hero-sub" data-en>One bright place for all of it: uplifting news from every corner of the globe, a worldwide sports world to cheer in, short feel-good videos, a real fitness feed, games you play with friends, safe messaging, photo moments, small businesses, vacation galleries, birthdays, gentle wellness — and a community that lifts each other up.</p>
+  <p class="hero-sub" data-es>Un solo lugar luminoso para todo: noticias inspiradoras de todo el mundo, un mundo deportivo global para animar, videos cortos que alegran, un feed de fitness real, juegos para jugar con amigos, mensajes seguros, momentos con fotos, pequeños negocios, galerías de vacaciones, cumpleaños, bienestar suave — y una comunidad que se anima entre sí.</p>
 
   <a href="https://apps.apple.com/us/app/bright-side-good-news-daily/id6774821890" class="btn-primary" id="appStoreBtn">
     <span data-en>⬇ Download on the App Store</span>
     <span data-es>⬇ Descargar en el App Store</span>
   </a>
-  <p class="android-soon" data-en>🤖 Android coming soon</p>
-  <p class="android-soon" data-es>🤖 Android muy pronto</p>
-  <p class="hero-note" data-en>Free · iPhone & iPad · No ads · No tracking</p>
-  <p class="hero-note" data-es>Gratis · iPhone & iPad · Sin anuncios · Sin rastreo</p>
+  <a href="https://play.google.com/store/apps/details?id=com.chines.brightside" class="btn-primary" id="playStoreBtn">
+    <span data-en>▶ Get it on Google Play</span>
+    <span data-es>▶ Disponible en Google Play</span>
+  </a>
+  <p class="hero-note" data-en>Free · iPhone, iPad & Android · No ads · No tracking</p>
+  <p class="hero-note" data-es>Gratis · iPhone, iPad y Android · Sin anuncios · Sin rastreo</p>
 </div>
 
 <!-- Stats -->
 <div class="stats">
+  <div class="stat">
+    <div class="stat-num">★ 5.0</div>
+    <div class="stat-label" data-en>App Store Rating</div>
+    <div class="stat-label" data-es>Calificación App Store</div>
+  </div>
   <div class="stat">
     <div class="stat-num">100%</div>
     <div class="stat-label" data-en>Positive Stories</div>
@@ -443,6 +463,98 @@
       <h3 data-es>Un Poco de Sol Diario</h3>
       <p data-es>Cada día: una sorpresa para descubrir, una pequeña meta de luz que completar, y un saludo que te recuerda cuánto te quieren. Razones cálidas para volver.</p>
       <p data-en>Every day: a surprise to unwrap, a tiny "sunshine goal" to complete, and a greeting that reminds you how loved you are. Warm reasons to come back — never nagging.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">🎬</div>
+      <h3 data-en>Watch</h3>
+      <h3 data-es>Watch</h3>
+      <p data-en>A feed of short, uplifting videos from creators around the world. A feel-good scroll you can actually get lost in — without the doom.</p>
+      <p data-es>Un feed de videos cortos e inspiradores de creadores de todo el mundo. Un scroll que te hace sentir bien — sin malas noticias.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">🎮</div>
+      <h3 data-en>Play With Friends</h3>
+      <h3 data-es>Juega con Amigos</h3>
+      <p data-en>Challenge a friend to head-to-head matches and watch them play out move by move — plus 30+ calm solo games with weekly world leaderboards.</p>
+      <p data-es>Reta a un amigo a partidas mano a mano y míralas jugada por jugada — además de más de 30 juegos relajantes con tablas mundiales cada semana.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">💪</div>
+      <h3 data-en>A Real Fitness Feed</h3>
+      <h3 data-es>Un Feed de Fitness Real</h3>
+      <p data-en>Share workouts, follow friends' wins, and join step challenges. Movement that's social and encouraging — cheering each other on, never competing with strangers.</p>
+      <p data-es>Comparte entrenamientos, sigue los logros de tus amigos y únete a retos de pasos. Movimiento social y motivador — animándose entre sí, sin competir con extraños.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">💬</div>
+      <h3 data-en>Safe Messages</h3>
+      <h3 data-es>Mensajes Seguros</h3>
+      <p data-en>Friend-gated, AI-moderated chats with GIFs, reactions, and a Face ID lock. Private conversations that stay kind — built safe for 13+.</p>
+      <p data-es>Chats entre amigos, moderados con IA, con GIFs, reacciones y bloqueo con Face ID. Conversaciones privadas que se mantienen amables — seguras para mayores de 13.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">📸</div>
+      <h3 data-en>Photos &amp; Galleries</h3>
+      <h3 data-es>Fotos y Galerías</h3>
+      <p data-en>Share up to 10 photos straight from your library in beautiful swipeable galleries — with a built-in editor to make every shot shine.</p>
+      <p data-es>Comparte hasta 10 fotos directamente desde tu galería en hermosos carruseles deslizables — con un editor integrado para que cada toma brille.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">✨</div>
+      <h3 data-en>Moments</h3>
+      <h3 data-es>Momentos</h3>
+      <p data-en>Little slices of real, good life from the community — the everyday moments worth sharing and celebrating together.</p>
+      <p data-es>Pequeños momentos de la vida real y buena de la comunidad — los instantes cotidianos que vale la pena compartir y celebrar juntos.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">🛍️</div>
+      <h3 data-en>Small Business</h3>
+      <h3 data-es>Pequeños Negocios</h3>
+      <p data-en>A feed for small shops and makers to show what they create. Discover and support real people building something good.</p>
+      <p data-es>Un feed para pequeños negocios y creadores que muestran lo que hacen. Descubre y apoya a personas reales construyendo algo bueno.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-emoji">🏝️</div>
+      <h3 data-en>Vacations</h3>
+      <h3 data-es>Vacaciones</h3>
+      <p data-en>Travel inspiration from real trips — multi-photo galleries of the places that lit people up. Wanderlust, the wholesome way.</p>
+      <p data-es>Inspiración de viajes reales — galerías de fotos de los lugares que iluminaron a la gente. Ganas de viajar, de la manera más sana.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Reviews -->
+<div class="reviews-section">
+  <div class="reviews-inner">
+    <div class="rating-hero">
+      <div class="rating-stars">★★★★★</div>
+      <div class="rating-score">5.0</div>
+      <p class="rating-cap" data-en>Five stars from every reviewer so far ⭐️</p>
+      <p class="rating-cap" data-es>Cinco estrellas de cada reseña hasta ahora ⭐️</p>
+    </div>
+    <h2 class="section-title" data-en>Loved from day one</h2>
+    <h2 class="section-title" data-es>Amada desde el primer día</h2>
+    <p class="section-sub" data-en>People are finding their bright side — and telling us about it.</p>
+    <p class="section-sub" data-es>La gente está encontrando su lado bueno — y nos lo cuenta.</p>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text" data-en>"Finally an app that makes opening my phone feel good instead of draining. The good news is real and the community is so kind."</p>
+        <p class="review-text" data-es>"Por fin una app que hace que abrir mi teléfono se sienta bien en vez de agotador. Las buenas noticias son reales y la comunidad es muy amable."</p>
+        <p class="review-name">App Store</p>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text" data-en>"My fiancée and I both use it in English and Spanish. Cheering for our team with the whole world is honestly addictive — in a good way."</p>
+        <p class="review-text" data-es>"Mi prometida y yo la usamos en inglés y español. Animar a nuestro equipo con todo el mundo es adictivo — del bueno."</p>
+        <p class="review-name">App Store</p>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text" data-en>"So much in one place — games with friends, the fitness feed, birthdays, the daily sunshine. And no ads or creepy tracking. Five stars."</p>
+        <p class="review-text" data-es>"Tantas cosas en un solo lugar — juegos con amigos, el feed de fitness, cumpleaños, el sol diario. Y sin anuncios ni rastreo. Cinco estrellas."</p>
+        <p class="review-name">App Store</p>
+      </div>
     </div>
   </div>
 </div>
