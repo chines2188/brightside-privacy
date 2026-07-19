@@ -108,6 +108,26 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .post .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:46px;text-shadow:0 2px 12px rgba(0,0,0,.5)}
 .post .bigheart{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px;opacity:0;pointer-events:none;filter:drop-shadow(0 4px 16px rgba(0,0,0,.4))}
 .post .mutepill{position:absolute;right:10px;bottom:10px;font-size:15px;background:rgba(0,0,0,.5);color:#fff;border-radius:999px;padding:5px 9px;pointer-events:none;backdrop-filter:blur(4px)}
+/* 🏋️ Fitness tab */
+.lbrow{display:flex;align-items:center;gap:11px;padding:10px 13px;border-bottom:1px solid var(--line)}
+.lbrow:last-child{border-bottom:0}
+.lbrow .rk{width:26px;text-align:center;font-weight:900;color:var(--muted);font-size:14px}
+.lbrow .av{width:34px;height:34px;border-radius:50%;object-fit:cover;background:var(--cream);flex:none}
+.lbrow .av.ph{display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--muted)}
+.lbrow .nm{font-weight:800;font-size:14.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbrow .sc{font-weight:900;color:var(--orange)}
+.lbrow.me{background:color-mix(in srgb,var(--orange) 16%,transparent);border-radius:12px}
+.lbrow .rk.medal{font-size:17px}
+.exgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.excard{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.excard img{width:100%;height:130px;object-fit:cover;background:#0d0d0f;display:block}
+.excard .exb{padding:9px 11px}
+.excard .exn{font-weight:800;font-size:13.5px;text-transform:capitalize;line-height:1.25}
+.excard .exm{color:var(--muted);font-size:11.5px;margin-top:3px;text-transform:capitalize}
+.wex{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.wex:last-child{border-bottom:0}
+.wex .wn{font-weight:800;font-size:14px;flex:1;text-transform:capitalize}
+.wex .ws{color:var(--muted);font-weight:800;font-size:13px}
 .post .bigheart.pop{animation:pop .8s ease forwards}
 @keyframes pop{0%{opacity:0;transform:scale(.4)}25%{opacity:1;transform:scale(1.15)}55%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
 .post .actions{display:flex;align-items:center;gap:16px;padding:10px 14px 0}
@@ -167,6 +187,7 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
     <div class="logo">☀️ Bright Side</div>
     <button data-v="feed"><span class="ic">☀️</span><span data-i18n="feed">Feed</span></button>
     <button data-v="gym"><span class="ic">💪</span><span data-i18n="gym">Gym</span></button>
+    <button data-v="fitness"><span class="ic">🏋️</span><span data-i18n="fitness">Fitness</span></button>
     <button data-v="people"><span class="ic">🔍</span><span data-i18n="people">People</span></button>
     <button data-v="msgs"><span class="ic">💬</span><span data-i18n="msgs">Messages</span></button>
     <button data-v="call"><span class="ic">📞</span><span data-i18n="call">Call</span></button>
@@ -185,6 +206,7 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 <nav id="nav" class="hide">
   <button data-v="feed">☀️ <span data-i18n="feed">Feed</span></button>
   <button data-v="gym">💪 <span data-i18n="gym">Gym</span></button>
+  <button data-v="fitness">🏋️ <span data-i18n="fitness">Fitness</span></button>
   <button data-v="people">🔍 <span data-i18n="people">People</span></button>
   <button data-v="msgs">💬 <span data-i18n="msgs">Messages</span></button>
   <button data-v="call">📞 <span data-i18n="call">Call</span></button>
@@ -202,8 +224,8 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 var API = 'https://resplendent-tenderness-production.up.railway.app';
 var ES = /^es/i.test(navigator.language || '');
 var T = ES
-  ? { feed:'Inicio', people:'Gente', msgs:'Mensajes', call:'Llamar', login:'Entrar', welcome:'Bienvenido de vuelta ☀️', user:'Usuario o correo', pass:'Contraseña', signin:'Entrar', noacct:'¿No tienes cuenta? Descarga la app — es gratis', wrong:'Usuario o contraseña incorrectos.', writemsg:'Mensaje…', send:'Enviar', nomsgs:'Aún no hay conversaciones — empieza una en la app ☀️', startcall:'🎥 Abrir una sala de llamada', callsub:'Tu sala se abre en el navegador — comparte el enlace o el código. Video, voz y subtítulos traducidos en vivo.', joincode:'Unirme con un código', logout:'Salir', loading:'Cargando…', empty:'Nada por aquí todavía — ¡vuelve pronto! ☀️', foryou:'Para ti', following:'Siguiendo', funny:'😂 Humor', rise:'🚀 Motiva', follow:'Seguir', ing:'Siguiendo', sug:'Sugerencias para ti', newbies:'Nuevos en Bright Side', pymk:'Quizás conozcas', search:'Buscar gente…', none:'Nadie aún — revisa la ortografía ☀️', seeall:'Ver todo', likedby:'Les gusta a', andothers:function(n){return ' y ' + n + ' más';}, promoT:'📞 Llamadas que se traducen solas', promoB:'Videollamadas con subtítulos en vivo EN↔ES — ella habla español, tú lees inglés. Solo en Bright Side.', getapp:'Descargar la app', comments:'Los comentarios viven en la app ☀️', guest:'Solo mirar 👀', guestWho:'de visita', guestNudge:'Estás de visita ☀️ Crea tu cuenta gratis para unirte', guestJoin:'Unirme', signin2:'Ya tengo cuenta', needAcct:'Crea tu cuenta gratis en la app para usar mensajes y llamadas ☀️', news:'Noticias', gym:'Gym', readmore:'Leer más' }
-  : { feed:'Feed', people:'People', msgs:'Messages', call:'Call', login:'Log in', welcome:'Welcome back ☀️', user:'Username or email', pass:'Password', signin:'Sign in', noacct:"No account? Get the app — it's free", wrong:'Wrong username or password.', writemsg:'Message…', send:'Send', nomsgs:'No conversations yet — start one in the app ☀️', startcall:'🎥 Open a call room', callsub:'Your room opens right in the browser — share the link or code with anyone. Video, voice, live-translated captions.', joincode:'Join with a code', logout:'Log out', loading:'Loading…', empty:'Nothing here yet — check back soon! ☀️', foryou:'For you', following:'Following', funny:'😂 Funny', rise:'🚀 Rise', follow:'Follow', ing:'Following', sug:'Suggested for you', newbies:'New to Bright Side', pymk:'People you may know', search:'Search people…', none:'No one yet — double-check the spelling ☀️', seeall:'See all', likedby:'Liked by', andothers:function(n){return ' and ' + n + ' others';}, promoT:'📞 Calls that translate themselves', promoB:'Live video calls with EN↔ES captions both directions — she speaks Spanish, you read English. Only on Bright Side.', getapp:'Get the app', comments:'Comments live in the app ☀️', guest:'Just browse 👀', guestWho:'browsing', guestNudge:"You're just looking ☀️ Create your free account to join in", guestJoin:'Join free', signin2:'I have an account', needAcct:'Create your free account in the app to use messages and calls ☀️', news:'Good News', gym:'Gym', readmore:'Read more' };
+  ? { feed:'Inicio', people:'Gente', msgs:'Mensajes', call:'Llamar', login:'Entrar', welcome:'Bienvenido de vuelta ☀️', user:'Usuario o correo', pass:'Contraseña', signin:'Entrar', noacct:'¿No tienes cuenta? Descarga la app — es gratis', wrong:'Usuario o contraseña incorrectos.', writemsg:'Mensaje…', send:'Enviar', nomsgs:'Aún no hay conversaciones — empieza una en la app ☀️', startcall:'🎥 Abrir una sala de llamada', callsub:'Tu sala se abre en el navegador — comparte el enlace o el código. Video, voz y subtítulos traducidos en vivo.', joincode:'Unirme con un código', logout:'Salir', loading:'Cargando…', empty:'Nada por aquí todavía — ¡vuelve pronto! ☀️', foryou:'Para ti', following:'Siguiendo', funny:'😂 Humor', rise:'🚀 Motiva', follow:'Seguir', ing:'Siguiendo', sug:'Sugerencias para ti', newbies:'Nuevos en Bright Side', pymk:'Quizás conozcas', search:'Buscar gente…', none:'Nadie aún — revisa la ortografía ☀️', seeall:'Ver todo', likedby:'Les gusta a', andothers:function(n){return ' y ' + n + ' más';}, promoT:'📞 Llamadas que se traducen solas', promoB:'Videollamadas con subtítulos en vivo EN↔ES — ella habla español, tú lees inglés. Solo en Bright Side.', getapp:'Descargar la app', comments:'Los comentarios viven en la app ☀️', guest:'Solo mirar 👀', guestWho:'de visita', guestNudge:'Estás de visita ☀️ Crea tu cuenta gratis para unirte', guestJoin:'Unirme', signin2:'Ya tengo cuenta', needAcct:'Crea tu cuenta gratis en la app para usar mensajes y llamadas ☀️', news:'Noticias', gym:'Gym', fitness:'Fitness', readmore:'Leer más' }
+  : { feed:'Feed', people:'People', msgs:'Messages', call:'Call', login:'Log in', welcome:'Welcome back ☀️', user:'Username or email', pass:'Password', signin:'Sign in', noacct:"No account? Get the app — it's free", wrong:'Wrong username or password.', writemsg:'Message…', send:'Send', nomsgs:'No conversations yet — start one in the app ☀️', startcall:'🎥 Open a call room', callsub:'Your room opens right in the browser — share the link or code with anyone. Video, voice, live-translated captions.', joincode:'Join with a code', logout:'Log out', loading:'Loading…', empty:'Nothing here yet — check back soon! ☀️', foryou:'For you', following:'Following', funny:'😂 Funny', rise:'🚀 Rise', follow:'Follow', ing:'Following', sug:'Suggested for you', newbies:'New to Bright Side', pymk:'People you may know', search:'Search people…', none:'No one yet — double-check the spelling ☀️', seeall:'See all', likedby:'Liked by', andothers:function(n){return ' and ' + n + ' others';}, promoT:'📞 Calls that translate themselves', promoB:'Live video calls with EN↔ES captions both directions — she speaks Spanish, you read English. Only on Bright Side.', getapp:'Get the app', comments:'Comments live in the app ☀️', guest:'Just browse 👀', guestWho:'browsing', guestNudge:"You're just looking ☀️ Create your free account to join in", guestJoin:'Join free', signin2:'I have an account', needAcct:'Create your free account in the app to use messages and calls ☀️', news:'Good News', gym:'Gym', fitness:'Fitness', readmore:'Read more' };
 document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = T[el.getAttribute('data-i18n')] || el.textContent; });
 
 var S = { user:null, token:null, guest:false, view:'feed', mode:'all', convo:null, pollTimer:null, groups:[], liked:{}, followed:{} };
@@ -761,6 +783,125 @@ function pvRender() {
   }
 }
 
+/* ── 🏋️ FITNESS (leaderboard + today's workout + exercise library) ── */
+// The main selling point, on the web: check the leaderboard from your desk, plan
+// today's workout, browse the exercise library. Leaderboard is server-backed so it
+// syncs 1:1 with the phone. Workout + library proxy the app's WorkoutX API.
+var FT = ES
+  ? { sub:['🏆 Tabla','🏋️ Hoy','📚 Ejercicios'],
+      board:{miles:'Millas',workouts:'Entrenos',minutes:'Minutos',streak:'Racha',calories:'Calorías',steps:'Pasos'},
+      units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
+      you:'tú', global:'Global', friendsW:'Amigos',
+      norows:'Aún no hay nadie aquí — ¡sé el primero esta semana! ☀️',
+      wintro:'Elige tu meta y genera el entreno de hoy 💪', generate:'Generar entreno',
+      goals:[['strength','Fuerza'],['hypertrophy','Músculo'],['endurance','Resistencia'],['fatloss','Quemar']],
+      searchEx:'Buscar un ejercicio…', wlimit:'Generaste muchos hoy — vuelve mañana ☀️',
+      wfail:'No se pudo generar ahora. Pruébalo en la app ☀️',
+      exempty:'Escribe para buscar entre miles de ejercicios 📚' }
+  : { sub:['🏆 Board','🏋️ Today','📚 Exercises'],
+      board:{miles:'Miles',workouts:'Workouts',minutes:'Minutes',streak:'Streak',calories:'Calories',steps:'Steps'},
+      units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
+      you:'you', global:'Global', friendsW:'Friends',
+      norows:'Nobody here yet — be the first this week! ☀️',
+      wintro:"Pick your goal and generate today's workout 💪", generate:'Generate workout',
+      goals:[['strength','Strength'],['hypertrophy','Muscle'],['endurance','Endurance'],['fatloss','Fat loss']],
+      searchEx:'Search an exercise…', wlimit:'You generated a lot today — back tomorrow ☀️',
+      wfail:"Couldn't generate right now. Try it in the app ☀️",
+      exempty:'Type to search thousands of exercises 📚' };
+var FIT = { sub:0, board:'miles', friends:false, goal:'strength', data:null };
+// GET helper for the WorkoutX-backed endpoints (they take query strings + a token header).
+function apiGet(path) {
+  return fetch(API + path, { headers: S.token ? { Authorization: 'Bearer ' + S.token } : {} })
+    .then(function (r) { return r.json(); }).catch(function () { return { ok:false }; });
+}
+function showFitness() {
+  setTab('fitness'); stopPoll();
+  main('<div class="modes" id="fitnav">' + FT.sub.map(function (s, i) {
+    return '<button data-s="' + i + '"' + (FIT.sub === i ? ' class="on"' : '') + '>' + s + '</button>';
+  }).join('') + '</div><div id="fitbody"></div>');
+  document.querySelectorAll('#fitnav button').forEach(function (b) {
+    b.onclick = function () { FIT.sub = +b.getAttribute('data-s'); showFitness(); };
+  });
+  if (FIT.sub === 0) fitBoard();
+  else if (FIT.sub === 1) fitWorkout();
+  else fitLibrary();
+}
+function fitBoard() {
+  el('fitbody').innerHTML = '<div class="spin">' + T.loading + '</div>';
+  api('/api/competition/fitness', { username: S.user || '' }).then(function (r) {
+    FIT.data = r || {}; drawBoard();
+  }).catch(function () { el('fitbody').innerHTML = '<div class="card center muted">' + T.empty + '</div>'; });
+}
+function drawBoard() {
+  var boards = [['miles','🏃'],['workouts','💪'],['minutes','⏱'],['streak','🔥'],['calories','🍎'],['steps','👟']];
+  var cur = FIT.board, d = FIT.data || {}, unit = FT.units[cur] || '';
+  var useFriends = FIT.friends && !!S.user;
+  var blk = d[cur] || { top:[], friends:[] };
+  var rows = (useFriends ? blk.friends : blk.top) || [];
+  var pills = '<div class="modes">' + boards.map(function (b) {
+    return '<button data-b="' + b[0] + '"' + (cur === b[0] ? ' class="on"' : '') + '>' + b[1] + ' ' + FT.board[b[0]] + '</button>';
+  }).join('') + '</div>';
+  var scope = S.user ? '<div class="modes" style="margin-top:2px">' +
+    '<button data-f="0"' + (!useFriends ? ' class="on"' : '') + '>🌍 ' + FT.global + '</button>' +
+    '<button data-f="1"' + (useFriends ? ' class="on"' : '') + '>👥 ' + FT.friendsW + '</button></div>' : '';
+  var list = rows.length ? rows.map(function (r) {
+    var medal = r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : '';
+    var av = r.avatar ? '<img class="av" src="' + esc(hiRes(r.avatar, 148)) + '" alt="">'
+      : '<div class="av ph">' + esc(String(r.name || r.username || '?').slice(0, 1).toUpperCase()) + '</div>';
+    return '<div class="lbrow' + (r.isMe ? ' me' : '') + '"><div class="rk' + (medal ? ' medal' : '') + '">' + (medal || r.rank) + '</div>' +
+      av + '<div class="nm">' + esc(r.name || r.username) + (r.flag ? ' ' + esc(r.flag) : '') + (r.isMe ? ' · ' + FT.you : '') + '</div>' +
+      '<div class="sc">' + (Number(r.score) || 0).toLocaleString() + (unit ? ' ' + unit : '') + '</div></div>';
+  }).join('') : '<div class="center muted" style="padding:22px">' + FT.norows + '</div>';
+  el('fitbody').innerHTML = pills + scope + '<div class="card" style="padding:6px 0;margin-top:8px">' + list + '</div>';
+  document.querySelectorAll('#fitbody [data-b]').forEach(function (b) { b.onclick = function () { FIT.board = b.getAttribute('data-b'); drawBoard(); }; });
+  document.querySelectorAll('#fitbody [data-f]').forEach(function (b) { b.onclick = function () { FIT.friends = b.getAttribute('data-f') === '1'; drawBoard(); }; });
+}
+function fitWorkout() {
+  el('fitbody').innerHTML = '<div class="card"><p class="muted" style="margin:2px 0 10px">' + FT.wintro + '</p><div class="modes">' +
+    FT.goals.map(function (g) { return '<button data-g="' + g[0] + '"' + ((FIT.goal || 'strength') === g[0] ? ' class="on"' : '') + '>' + g[1] + '</button>'; }).join('') +
+    '</div><button class="btn" id="wgen" style="margin-top:10px">' + FT.generate + '</button></div><div id="wout" style="margin-top:10px"></div>';
+  document.querySelectorAll('#fitbody [data-g]').forEach(function (b) { b.onclick = function () { FIT.goal = b.getAttribute('data-g'); fitWorkout(); }; });
+  el('wgen').onclick = function () {
+    el('wout').innerHTML = '<div class="spin">' + T.loading + '</div>';
+    apiGet('/api/workout/generate?goal=' + encodeURIComponent(FIT.goal || 'strength') + '&duration=30&level=beginner').then(function (r) {
+      if (!r || !r.ok) { el('wout').innerHTML = '<div class="card center muted">' + (r && r.error === 'limit' ? FT.wlimit : FT.wfail) + '</div>'; return; }
+      var w = r.workout || {}; var ex = w.exercises || w.items || (Array.isArray(w) ? w : []);
+      var rows = ex.length ? ex.map(function (e) {
+        var nm = e.name || e.exercise || e.title || '';
+        var bits = [];
+        if (e.sets) bits.push(e.sets + '×' + (e.reps != null ? e.reps : ''));
+        else if (e.reps != null) bits.push(String(e.reps));
+        if (e.duration) bits.push(String(e.duration));
+        return '<div class="wex"><div class="wn">' + esc(String(nm)) + '</div><div class="ws">' + esc(bits.join(' · ')) + '</div></div>';
+      }).join('') : '<div class="center muted" style="padding:18px">' + FT.wfail + '</div>';
+      el('wout').innerHTML = '<div class="card" style="padding:4px 0">' + rows + '</div>';
+    });
+  };
+}
+function fitLibrary() {
+  el('fitbody').innerHTML = '<input id="exq" placeholder="' + FT.searchEx + '" autocomplete="off" style="margin-top:0"><div id="exres"><div class="center muted" style="padding:20px">' + FT.exempty + '</div></div>';
+  var timer = null;
+  el('exq').oninput = function () {
+    var q = el('exq').value.trim();
+    clearTimeout(timer);
+    if (q.length < 2) { el('exres').innerHTML = '<div class="center muted" style="padding:20px">' + FT.exempty + '</div>'; return; }
+    timer = setTimeout(function () {
+      el('exres').innerHTML = '<div class="spin">' + T.loading + '</div>';
+      apiGet('/api/workout/exercises?name=' + encodeURIComponent(q) + '&limit=12').then(function (r) {
+        var ex = (r && r.exercises) || [];
+        if (!ex.length) { el('exres').innerHTML = '<div class="card center muted">' + T.none + '</div>'; return; }
+        el('exres').innerHTML = '<div class="exgrid">' + ex.map(function (e) {
+          var id = e.id || e.exerciseId || e.gifId || '';
+          var gif = id ? API + '/api/workout/gif/' + encodeURIComponent(id) : (e.gifUrl || '');
+          return '<div class="excard">' + (gif ? '<img loading="lazy" src="' + esc(gif) + '" alt="">' : '<div style="height:130px;background:#0d0d0f"></div>') +
+            '<div class="exb"><div class="exn">' + esc(String(e.name || '')) + '</div>' +
+            '<div class="exm">' + esc(String(e.target || e.bodyPart || '')) + (e.equipment ? ' · ' + esc(String(e.equipment)) : '') + '</div></div></div>';
+        }).join('') + '</div>';
+      });
+    }, 350);
+  };
+}
+
 /* ── PEOPLE (search + discovery, one-tap follow) ── */
 function showPeople() {
   setTab('people'); stopPoll();
@@ -886,6 +1027,7 @@ function go(v) {
   stopPoll();
   if (v === 'feed') showFeed();
   else if (v === 'gym') showGym();
+  else if (v === 'fitness') showFitness();
   else if (v === 'people') showPeople();
   else if (v === 'msgs') showMsgs();
   else showCall();
