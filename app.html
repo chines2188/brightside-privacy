@@ -116,6 +116,8 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .lbrow .av.ph{display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--muted)}
 .lbrow .nm{font-weight:800;font-size:14.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lbrow .sc{font-weight:900;color:var(--orange)}
+.lbrow .lbshare{border:0;background:none;font-size:16px;cursor:pointer;padding:2px 4px;opacity:.55}
+.lbrow .lbshare:hover{opacity:1}
 .lbrow.me{background:color-mix(in srgb,var(--orange) 16%,transparent);border-radius:12px}
 .lbrow .rk.medal{font-size:17px}
 .exgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -808,7 +810,7 @@ var FT = ES
       eaten:'Comido hoy', noeaten:'Aún no registras comida hoy — agrégala abajo ☀️',
       addfood:'Buscar comida', describe:'Descríbela (ej. 2 huevos y tostada)',
       foodlocal:'Se guarda en este navegador — aún no se sincroniza con el teléfono',
-      clearday:'Limpiar el día', nodata:'—' }
+      clearday:'Limpiar el día', nodata:'—', shareT:'Compartir mi puesto' }
   : { sub:['☀️ Today','🏆 Board','🏋️ Workout','📚 Exercises','🍎 Food'],
       board:{miles:'Miles',workouts:'Workouts',minutes:'Minutes',streak:'Streak',calories:'Calories',steps:'Steps'},
       units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
@@ -823,7 +825,7 @@ var FT = ES
       eaten:'Eaten today', noeaten:'No food logged yet today — add some below ☀️',
       addfood:'Search food', describe:'Describe it (e.g. 2 eggs and toast)',
       foodlocal:"Saved in this browser — doesn't sync to the phone yet",
-      clearday:'Clear the day', nodata:'—' };
+      clearday:'Clear the day', nodata:'—', shareT:'Share my rank' };
 var FIT = { sub:0, board:'miles', friends:false, goal:'strength', data:null };
 // GET helper for the WorkoutX-backed endpoints (they take query strings + a token header).
 function apiGet(path) {
@@ -935,17 +937,64 @@ function drawBoard() {
   var scope = S.user ? '<div class="modes" style="margin-top:2px">' +
     '<button data-f="0"' + (!useFriends ? ' class="on"' : '') + '>🌍 ' + FT.global + '</button>' +
     '<button data-f="1"' + (useFriends ? ' class="on"' : '') + '>👥 ' + FT.friendsW + '</button></div>' : '';
-  var list = rows.length ? rows.map(function (r) {
+  FIT.rows = rows;
+  var list = rows.length ? rows.map(function (r, idx) {
     var medal = r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : '';
     var av = r.avatar ? '<img class="av" src="' + esc(hiRes(r.avatar, 148)) + '" alt="">'
       : '<div class="av ph">' + esc(String(r.name || r.username || '?').slice(0, 1).toUpperCase()) + '</div>';
     return '<div class="lbrow' + (r.isMe ? ' me' : '') + '"><div class="rk' + (medal ? ' medal' : '') + '">' + (medal || r.rank) + '</div>' +
       av + '<div class="nm">' + esc(r.name || r.username) + (r.flag ? ' ' + esc(r.flag) : '') + (r.isMe ? ' · ' + FT.you : '') + '</div>' +
-      '<div class="sc">' + (Number(r.score) || 0).toLocaleString() + (unit ? ' ' + unit : '') + '</div></div>';
+      '<div class="sc">' + (Number(r.score) || 0).toLocaleString() + (unit ? ' ' + unit : '') + '</div>' +
+      '<button class="lbshare" data-sh="' + idx + '" title="' + FT.shareT + '">📸</button></div>';
   }).join('') : '<div class="center muted" style="padding:22px">' + FT.norows + '</div>';
   el('fitbody').innerHTML = pills + scope + '<div class="card" style="padding:6px 0;margin-top:8px">' + list + '</div>';
   document.querySelectorAll('#fitbody [data-b]').forEach(function (b) { b.onclick = function () { FIT.board = b.getAttribute('data-b'); drawBoard(); }; });
   document.querySelectorAll('#fitbody [data-f]').forEach(function (b) { b.onclick = function () { FIT.friends = b.getAttribute('data-f') === '1'; drawBoard(); }; });
+  document.querySelectorAll('#fitbody [data-sh]').forEach(function (b) { b.onclick = function () { shareCard(FIT.rows[+b.getAttribute('data-sh')], FIT.board); }; });
+}
+// 📸 Flex share-card — draws a dark-glass gold rank card and shares it (native share
+// sheet on mobile, PNG download on desktop). Every share carries getbrightsideapp.com.
+function shareCard(r, board) {
+  if (!r) return;
+  var W = 1080, H = 1080, c = document.createElement('canvas'); c.width = W; c.height = H;
+  var x = c.getContext('2d');
+  var FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+  x.fillStyle = '#131416'; x.fillRect(0, 0, W, H);
+  x.strokeStyle = '#F6C040'; x.lineWidth = 10; x.strokeRect(40, 40, W - 80, H - 80);
+  x.textAlign = 'center';
+  x.fillStyle = '#F6C040'; x.font = 'bold 56px ' + FONT; x.fillText('☀️ Bright Side', W / 2, 165);
+  var cx = W / 2, cy = 360, rad = 96;
+  x.fillStyle = '#28221A'; x.beginPath(); x.arc(cx, cy, rad, 0, Math.PI * 2); x.fill();
+  x.fillStyle = '#F6C040'; x.font = 'bold 88px ' + FONT; x.textBaseline = 'middle';
+  x.fillText(String(r.name || r.username || '?').slice(0, 1).toUpperCase(), cx, cy + 4);
+  x.textBaseline = 'alphabetic';
+  x.fillStyle = '#F4EDE1'; x.font = 'bold 52px ' + FONT;
+  x.fillText(String(r.name || r.username) + (r.flag ? ' ' + r.flag : ''), W / 2, 515);
+  var medal = r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : '';
+  x.fillStyle = '#F6C040'; x.font = 'bold 190px ' + FONT;
+  x.fillText(medal || ('#' + r.rank), W / 2, 725);
+  var unit = FT.units[board] || '';
+  x.fillStyle = '#F4EDE1'; x.font = 'bold 74px ' + FONT;
+  x.fillText((Number(r.score) || 0).toLocaleString() + (unit ? ' ' + unit : ''), W / 2, 830);
+  x.fillStyle = '#A99C8A'; x.font = '600 40px ' + FONT;
+  x.fillText((ES ? 'esta semana · ' : 'this week · ') + FT.board[board], W / 2, 892);
+  x.fillStyle = '#A99C8A'; x.font = '500 33px ' + FONT;
+  x.fillText(ES ? 'donde tu esfuerzo se celebra, no se compara ☀️' : 'where your effort gets cheered, not compared ☀️', W / 2, 980);
+  x.fillStyle = '#F6C040'; x.font = 'bold 40px ' + FONT;
+  x.fillText('getbrightsideapp.com', W / 2, 1032);
+  c.toBlob(function (blob) {
+    if (!blob) return;
+    var cap = (ES ? 'Mi semana en Bright Side ☀️ ' : 'My week on Bright Side ☀️ ') + 'getbrightsideapp.com';
+    try {
+      var file = new File([blob], 'brightside-rank.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], text: cap }).catch(function () {});
+        return;
+      }
+    } catch (e) {}
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'brightside-rank.png'; document.body.appendChild(a); a.click(); a.remove();
+  }, 'image/png');
 }
 function fitWorkout() {
   el('fitbody').innerHTML = '<div class="card"><p class="muted" style="margin:2px 0 10px">' + FT.wintro + '</p><div class="modes">' +
