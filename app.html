@@ -130,6 +130,10 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .wex:last-child{border-bottom:0}
 .wex .wn{font-weight:800;font-size:14px;flex:1;text-transform:capitalize}
 .wex .ws{color:var(--muted);font-weight:800;font-size:13px}
+.wchk{cursor:pointer}
+.wchk .wcbox{width:22px;height:22px;border-radius:7px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;color:#231a06;font-weight:900;font-size:13px;flex:none}
+.wchk.done .wcbox{background:var(--orange);border-color:var(--orange)}
+.wchk.done .wn{text-decoration:line-through;color:var(--muted)}
 .wex[data-add]{cursor:pointer}
 .wex .fx{border:0;background:none;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
 .chal{background:var(--card);border:1px solid var(--orange);border-radius:16px;padding:14px 16px;margin-bottom:12px}
@@ -891,6 +895,11 @@ function fitToday() {
       return '<div class="tile"><div class="tv">' + b[1] + ' ' + val + '</div><div class="tl">' + FT.board[b[0]] + rk + '</div></div>';
     }).join('');
     tiles += '<div class="tile"><div class="tv">🍽 ' + eaten.toLocaleString() + ' cal</div><div class="tl">' + FT.eaten + '</div></div>';
+    var sw = getSavedWorkout();
+    if (sw && sw.exercises && sw.exercises.length) {
+      var wd = sw.exercises.filter(function (e) { return e.done; }).length;
+      tiles += '<div class="tile"><div class="tv">🏋️ ' + wd + '/' + sw.exercises.length + '</div><div class="tl">' + (ES ? 'Entreno' : 'Workout') + '</div></div>';
+    }
     el('todaybody').innerHTML = '<div class="section">' + FT.myweek + '</div><div class="tiles">' + tiles + '</div>';
   }).catch(function () { el('todaybody').innerHTML = '<div class="card center muted">' + T.empty + '</div>'; });
 }
@@ -1035,7 +1044,13 @@ function shareCard(r, board) {
     a.download = 'brightside-rank.png'; document.body.appendChild(a); a.click(); a.remove();
   }, 'image/png');
 }
+// 🏋️ Today's workout — generate, SAVE, then check off each exercise (persists the day).
+function workoutKey() { return 'bsw_workout_' + new Date().toISOString().slice(0, 10); }
+function getSavedWorkout() { try { return JSON.parse(localStorage.getItem(workoutKey())); } catch (e) { return null; } }
+function saveWorkout(w) { try { localStorage.setItem(workoutKey(), JSON.stringify(w)); } catch (e) {} }
 function fitWorkout() {
+  var saved = getSavedWorkout();
+  if (saved && saved.exercises && saved.exercises.length) return renderSavedWorkout(saved);
   el('fitbody').innerHTML = '<div class="card"><p class="muted" style="margin:2px 0 10px">' + FT.wintro + '</p><div class="modes">' +
     FT.goals.map(function (g) { return '<button data-g="' + g[0] + '"' + ((FIT.goal || 'strength') === g[0] ? ' class="on"' : '') + '>' + g[1] + '</button>'; }).join('') +
     '</div><button class="btn" id="wgen" style="margin-top:10px">' + FT.generate + '</button></div><div id="wout" style="margin-top:10px"></div>';
@@ -1046,18 +1061,38 @@ function fitWorkout() {
       if (!r || !r.ok) { el('wout').innerHTML = '<div class="card center muted">' + (r && r.error === 'limit' ? FT.wlimit : FT.wfail) + '</div>'; return; }
       var w = r.workout || {}; if (w.data && !w.exercises && !Array.isArray(w)) w = w.data;
       var ex = w.exercises || w.items || (Array.isArray(w) ? w : []);
-      var rows = ex.length ? ex.map(function (e) {
-        var nm = (e.exercise && e.exercise.name) || e.name || e.title || '';
-        var bits = [];
-        if (e.sets) bits.push(e.sets + ' × ' + (e.reps != null ? e.reps : ''));
-        else if (e.reps != null) bits.push(String(e.reps));
-        if (e.restSeconds) bits.push(e.restSeconds + 's');
-        else if (e.duration) bits.push(String(e.duration));
-        return '<div class="wex"><div class="wn">' + esc(String(nm)) + '</div><div class="ws">' + esc(bits.join(' · ')) + '</div></div>';
-      }).join('') : '<div class="center muted" style="padding:18px">' + FT.wfail + '</div>';
-      el('wout').innerHTML = '<div class="card" style="padding:4px 0">' + rows + '</div>';
+      if (!ex.length) { el('wout').innerHTML = '<div class="card center muted">' + FT.wfail + '</div>'; return; }
+      var stored = { goal: FIT.goal, ts: Date.now(), mins: w.estimatedDurationMinutes || 0,
+        exercises: ex.map(function (e) {
+          return { name: (e.exercise && e.exercise.name) || e.name || e.title || '', sets: e.sets || 0,
+            reps: (e.reps != null ? e.reps : ''), rest: e.restSeconds || 0, done: false };
+        }) };
+      saveWorkout(stored); renderSavedWorkout(stored);
     });
   };
+}
+function renderSavedWorkout(w) {
+  var doneN = w.exercises.filter(function (e) { return e.done; }).length;
+  var pct = Math.max(2, Math.round(doneN / w.exercises.length * 100));
+  var allDone = doneN === w.exercises.length;
+  var rows = w.exercises.map(function (e, i) {
+    var sub = [];
+    if (e.sets) sub.push(e.sets + ' × ' + (e.reps != null ? e.reps : ''));
+    else if (e.reps !== '' && e.reps != null) sub.push(String(e.reps));
+    if (e.rest) sub.push(e.rest + 's');
+    return '<div class="wex wchk' + (e.done ? ' done' : '') + '" data-wi="' + i + '"><div class="wcbox">' + (e.done ? '✓' : '') + '</div>' +
+      '<div class="wn">' + esc(String(e.name || '')) + '</div><div class="ws">' + esc(sub.join(' · ')) + '</div></div>';
+  }).join('');
+  el('fitbody').innerHTML =
+    '<div class="card center" style="padding:14px"><div class="tv" style="font-size:23px">' + (allDone ? (ES ? '¡Entreno completo! 🎉' : 'Workout done! 🎉') : (ES ? 'Entreno de hoy 🏋️' : "Today's workout 🏋️")) + '</div>' +
+    '<div class="muted" style="font-size:13px;margin-top:3px">' + doneN + '/' + w.exercises.length + ' ' + (ES ? 'hechos' : 'done') + (w.mins ? ' · ~' + w.mins + ' min' : '') + '</div>' +
+    '<div class="chalbar" style="margin-top:9px"><i style="width:' + pct + '%"></i></div></div>' +
+    '<div class="card" style="padding:4px 0;margin-top:10px">' + rows + '</div>' +
+    '<button class="btn dark" id="wnew" style="margin-top:8px">' + (ES ? 'Nuevo entreno' : 'New workout') + '</button>';
+  document.querySelectorAll('#fitbody [data-wi]').forEach(function (b) {
+    b.onclick = function () { var s = getSavedWorkout(); var i = +b.getAttribute('data-wi'); s.exercises[i].done = !s.exercises[i].done; saveWorkout(s); renderSavedWorkout(s); };
+  });
+  el('wnew').onclick = function () { try { localStorage.removeItem(workoutKey()); } catch (e) {} fitWorkout(); };
 }
 function fitLibrary() {
   el('fitbody').innerHTML = '<input id="exq" placeholder="' + FT.searchEx + '" autocomplete="off" style="margin-top:0"><div id="exres"><div class="center muted" style="padding:20px">' + FT.exempty + '</div></div>';
