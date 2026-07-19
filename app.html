@@ -136,6 +136,20 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
 .tile .tv{font-weight:900;font-size:17px}
 .tile .tl{color:var(--muted);font-size:12px;margin-top:2px;text-transform:capitalize}
+/* 🎭 Anonymous Talk */
+.apost{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin-bottom:9px;cursor:pointer}
+.apost .ahat{font-size:12.5px;font-weight:800;color:var(--muted);margin-bottom:5px}
+.apost .abody{font-size:15px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.apost .afoot{display:flex;align-items:center;gap:14px;margin-top:9px;color:var(--muted);font-size:13px;font-weight:700}
+.apost .afoot button{border:0;background:none;font:inherit;font-weight:700;color:var(--muted);cursor:pointer;padding:0}
+.apost .afoot .boost.on{color:var(--orange)}
+.tcompose{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px}
+.tcompose textarea{width:100%;border:1px solid var(--line);background:var(--cream);color:var(--ink);border-radius:12px;padding:10px;font:inherit;font-size:15px;resize:vertical;min-height:70px;box-sizing:border-box}
+.tsun{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 14px;margin-bottom:8px}
+.tsun .sb{font-size:14.5px;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+.tsun .sf{margin-top:7px;color:var(--muted);font-size:12.5px;font-weight:700}
+.tsun .sf button{border:0;background:none;font:inherit;font-weight:700;color:var(--muted);cursor:pointer;padding:0}
+.tsun .sf .boost.on{color:var(--orange)}
 .post .bigheart.pop{animation:pop .8s ease forwards}
 @keyframes pop{0%{opacity:0;transform:scale(.4)}25%{opacity:1;transform:scale(1.15)}55%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
 .post .actions{display:flex;align-items:center;gap:16px;padding:10px 14px 0}
@@ -196,6 +210,7 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
     <button data-v="feed"><span class="ic">☀️</span><span data-i18n="feed">Feed</span></button>
     <button data-v="gym"><span class="ic">💪</span><span data-i18n="gym">Gym</span></button>
     <button data-v="fitness"><span class="ic">🏋️</span><span data-i18n="fitness">Fitness</span></button>
+    <button data-v="talk"><span class="ic">🎭</span><span data-i18n="talk">Talk</span></button>
     <button data-v="people"><span class="ic">🔍</span><span data-i18n="people">People</span></button>
     <button data-v="msgs"><span class="ic">💬</span><span data-i18n="msgs">Messages</span></button>
     <button data-v="call"><span class="ic">📞</span><span data-i18n="call">Call</span></button>
@@ -215,6 +230,7 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
   <button data-v="feed">☀️ <span data-i18n="feed">Feed</span></button>
   <button data-v="gym">💪 <span data-i18n="gym">Gym</span></button>
   <button data-v="fitness">🏋️ <span data-i18n="fitness">Fitness</span></button>
+  <button data-v="talk">🎭 <span data-i18n="talk">Talk</span></button>
   <button data-v="people">🔍 <span data-i18n="people">People</span></button>
   <button data-v="msgs">💬 <span data-i18n="msgs">Messages</span></button>
   <button data-v="call">📞 <span data-i18n="call">Call</span></button>
@@ -232,8 +248,8 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 var API = 'https://resplendent-tenderness-production.up.railway.app';
 var ES = /^es/i.test(navigator.language || '');
 var T = ES
-  ? { feed:'Inicio', people:'Gente', msgs:'Mensajes', call:'Llamar', login:'Entrar', welcome:'Bienvenido de vuelta ☀️', user:'Usuario o correo', pass:'Contraseña', signin:'Entrar', noacct:'¿No tienes cuenta? Descarga la app — es gratis', wrong:'Usuario o contraseña incorrectos.', writemsg:'Mensaje…', send:'Enviar', nomsgs:'Aún no hay conversaciones — empieza una en la app ☀️', startcall:'🎥 Abrir una sala de llamada', callsub:'Tu sala se abre en el navegador — comparte el enlace o el código. Video, voz y subtítulos traducidos en vivo.', joincode:'Unirme con un código', logout:'Salir', loading:'Cargando…', empty:'Nada por aquí todavía — ¡vuelve pronto! ☀️', foryou:'Para ti', following:'Siguiendo', funny:'😂 Humor', rise:'🚀 Motiva', follow:'Seguir', ing:'Siguiendo', sug:'Sugerencias para ti', newbies:'Nuevos en Bright Side', pymk:'Quizás conozcas', search:'Buscar gente…', none:'Nadie aún — revisa la ortografía ☀️', seeall:'Ver todo', likedby:'Les gusta a', andothers:function(n){return ' y ' + n + ' más';}, promoT:'📞 Llamadas que se traducen solas', promoB:'Videollamadas con subtítulos en vivo EN↔ES — ella habla español, tú lees inglés. Solo en Bright Side.', getapp:'Descargar la app', comments:'Los comentarios viven en la app ☀️', guest:'Solo mirar 👀', guestWho:'de visita', guestNudge:'Estás de visita ☀️ Crea tu cuenta gratis para unirte', guestJoin:'Unirme', signin2:'Ya tengo cuenta', needAcct:'Crea tu cuenta gratis en la app para usar mensajes y llamadas ☀️', news:'Noticias', gym:'Gym', fitness:'Fitness', readmore:'Leer más' }
-  : { feed:'Feed', people:'People', msgs:'Messages', call:'Call', login:'Log in', welcome:'Welcome back ☀️', user:'Username or email', pass:'Password', signin:'Sign in', noacct:"No account? Get the app — it's free", wrong:'Wrong username or password.', writemsg:'Message…', send:'Send', nomsgs:'No conversations yet — start one in the app ☀️', startcall:'🎥 Open a call room', callsub:'Your room opens right in the browser — share the link or code with anyone. Video, voice, live-translated captions.', joincode:'Join with a code', logout:'Log out', loading:'Loading…', empty:'Nothing here yet — check back soon! ☀️', foryou:'For you', following:'Following', funny:'😂 Funny', rise:'🚀 Rise', follow:'Follow', ing:'Following', sug:'Suggested for you', newbies:'New to Bright Side', pymk:'People you may know', search:'Search people…', none:'No one yet — double-check the spelling ☀️', seeall:'See all', likedby:'Liked by', andothers:function(n){return ' and ' + n + ' others';}, promoT:'📞 Calls that translate themselves', promoB:'Live video calls with EN↔ES captions both directions — she speaks Spanish, you read English. Only on Bright Side.', getapp:'Get the app', comments:'Comments live in the app ☀️', guest:'Just browse 👀', guestWho:'browsing', guestNudge:"You're just looking ☀️ Create your free account to join in", guestJoin:'Join free', signin2:'I have an account', needAcct:'Create your free account in the app to use messages and calls ☀️', news:'Good News', gym:'Gym', fitness:'Fitness', readmore:'Read more' };
+  ? { feed:'Inicio', people:'Gente', msgs:'Mensajes', call:'Llamar', login:'Entrar', welcome:'Bienvenido de vuelta ☀️', user:'Usuario o correo', pass:'Contraseña', signin:'Entrar', noacct:'¿No tienes cuenta? Descarga la app — es gratis', wrong:'Usuario o contraseña incorrectos.', writemsg:'Mensaje…', send:'Enviar', nomsgs:'Aún no hay conversaciones — empieza una en la app ☀️', startcall:'🎥 Abrir una sala de llamada', callsub:'Tu sala se abre en el navegador — comparte el enlace o el código. Video, voz y subtítulos traducidos en vivo.', joincode:'Unirme con un código', logout:'Salir', loading:'Cargando…', empty:'Nada por aquí todavía — ¡vuelve pronto! ☀️', foryou:'Para ti', following:'Siguiendo', funny:'😂 Humor', rise:'🚀 Motiva', follow:'Seguir', ing:'Siguiendo', sug:'Sugerencias para ti', newbies:'Nuevos en Bright Side', pymk:'Quizás conozcas', search:'Buscar gente…', none:'Nadie aún — revisa la ortografía ☀️', seeall:'Ver todo', likedby:'Les gusta a', andothers:function(n){return ' y ' + n + ' más';}, promoT:'📞 Llamadas que se traducen solas', promoB:'Videollamadas con subtítulos en vivo EN↔ES — ella habla español, tú lees inglés. Solo en Bright Side.', getapp:'Descargar la app', comments:'Los comentarios viven en la app ☀️', guest:'Solo mirar 👀', guestWho:'de visita', guestNudge:'Estás de visita ☀️ Crea tu cuenta gratis para unirte', guestJoin:'Unirme', signin2:'Ya tengo cuenta', needAcct:'Crea tu cuenta gratis en la app para usar mensajes y llamadas ☀️', news:'Noticias', gym:'Gym', fitness:'Fitness', talk:ES?'Hablar':'Talk', readmore:'Leer más' }
+  : { feed:'Feed', people:'People', msgs:'Messages', call:'Call', login:'Log in', welcome:'Welcome back ☀️', user:'Username or email', pass:'Password', signin:'Sign in', noacct:"No account? Get the app — it's free", wrong:'Wrong username or password.', writemsg:'Message…', send:'Send', nomsgs:'No conversations yet — start one in the app ☀️', startcall:'🎥 Open a call room', callsub:'Your room opens right in the browser — share the link or code with anyone. Video, voice, live-translated captions.', joincode:'Join with a code', logout:'Log out', loading:'Loading…', empty:'Nothing here yet — check back soon! ☀️', foryou:'For you', following:'Following', funny:'😂 Funny', rise:'🚀 Rise', follow:'Follow', ing:'Following', sug:'Suggested for you', newbies:'New to Bright Side', pymk:'People you may know', search:'Search people…', none:'No one yet — double-check the spelling ☀️', seeall:'See all', likedby:'Liked by', andothers:function(n){return ' and ' + n + ' others';}, promoT:'📞 Calls that translate themselves', promoB:'Live video calls with EN↔ES captions both directions — she speaks Spanish, you read English. Only on Bright Side.', getapp:'Get the app', comments:'Comments live in the app ☀️', guest:'Just browse 👀', guestWho:'browsing', guestNudge:"You're just looking ☀️ Create your free account to join in", guestJoin:'Join free', signin2:'I have an account', needAcct:'Create your free account in the app to use messages and calls ☀️', news:'Good News', gym:'Gym', fitness:'Fitness', talk:ES?'Hablar':'Talk', readmore:'Read more' };
 document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = T[el.getAttribute('data-i18n')] || el.textContent; });
 
 var S = { user:null, token:null, guest:false, view:'feed', mode:'all', convo:null, pollTimer:null, groups:[], liked:{}, followed:{} };
@@ -1045,6 +1061,128 @@ function fitLibrary() {
   };
 }
 
+/* ── 🎭 ANONYMOUS TALK (Reddit's usefulness without the cruelty; boost-only) ── */
+var TK = ES ? {
+  tsafe:'Sin IA leyendo · sin votos negativos · solo el cariño sube ☀️',
+  all:'Todo', warmth:'❤️‍🔥 Cariño', newest:'🆕 Reciente',
+  share:'＋ Comparte algo', sharePH:'Di lo real… nadie sabe quién eres', pick:'Elige un sombrero:',
+  post:'Publicar', needpost:'Entra en la app para publicar y responder ☀️',
+  replies:'rayitos', replyPH:'Manda un rayito de sol…', reply:'Responder', report:'Reportar',
+  empty:'Sé el primero en abrir el corazón aquí ☀️', back:'← Volver',
+  help:'¿Necesitas más que un amigo ahora? Hay ayuda real 💛'
+} : {
+  tsafe:'No AI reading · no downvotes · only warmth rises ☀️',
+  all:'All', warmth:'❤️‍🔥 Warmth', newest:'🆕 New',
+  share:'＋ Share something', sharePH:'Say the real thing… nobody knows who you are', pick:'Pick a hat:',
+  post:'Post', needpost:'Log in on the app to post and reply ☀️',
+  replies:'sunbeams', replyPH:'Send a little sunbeam back…', reply:'Reply', report:'Report',
+  empty:'Be the first to open up here ☀️', back:'← Back',
+  help:'Need more than a friend right now? Real help is here 💛'
+};
+var HATS = ES
+  ? [['rough','💛','Día difícil'],['ask','🙋','Pregunta'],['brainstorm','💡','Ideas'],['goodnews','🎉','Buenas noticias'],['vent','😤','Desahogo']]
+  : [['rough','💛','Rough day'],['ask','🙋','Ask'],['brainstorm','💡','Brainstorm'],['goodnews','🎉','Good news'],['vent','😤','Vent']];
+function hatMeta(h) { for (var i = 0; i < HATS.length; i++) if (HATS[i][0] === h) return HATS[i]; return ['ask','💬','']; }
+var TALK = { hat:'', sort:'new', post:null, composeHat:'rough', composing:false, boosted:{} };
+function showTalk() { setTab('talk'); stopPoll(); if (TALK.post) talkThread(); else talkList(); }
+function talkList() {
+  var hatPills = '<button data-h=""' + (TALK.hat === '' ? ' class="on"' : '') + '>' + TK.all + '</button>' +
+    HATS.map(function (h) { return '<button data-h="' + h[0] + '"' + (TALK.hat === h[0] ? ' class="on"' : '') + '>' + h[1] + ' ' + h[2] + '</button>'; }).join('');
+  var sortPills = '<button data-s="new"' + (TALK.sort === 'new' ? ' class="on"' : '') + '>' + TK.newest + '</button><button data-s="warmth"' + (TALK.sort === 'warmth' ? ' class="on"' : '') + '>' + TK.warmth + '</button>';
+  var compose = S.user
+    ? (TALK.composing ? talkComposer() : '<button class="btn" id="topen" style="margin:0 0 10px">' + TK.share + '</button>')
+    : '<div class="card center muted" style="padding:12px;margin-bottom:10px">' + TK.needpost + '</div>';
+  main('<p class="muted center" style="font-size:12px;margin:0 0 8px">' + TK.tsafe + '</p>' + compose +
+    '<div class="modes" id="thats">' + hatPills + '</div>' +
+    '<div class="modes" id="tsort" style="margin-top:0">' + sortPills + '</div>' +
+    '<div id="tfeed"><div class="spin">' + T.loading + '</div></div>');
+  bindTalkTop();
+  api('/api/anon/feed', { hat: TALK.hat, sort: TALK.sort }).then(function (r) {
+    var posts = (r && r.posts) || [];
+    el('tfeed').innerHTML = posts.length ? posts.map(talkCard).join('') : '<div class="card center muted" style="padding:22px">' + TK.empty + '</div>';
+    bindTalkCards();
+  }).catch(function () { el('tfeed').innerHTML = '<div class="card center muted">' + T.empty + '</div>'; });
+}
+function talkComposer() {
+  return '<div class="tcompose"><div style="font-weight:800;font-size:13px;margin-bottom:7px">' + TK.pick + '</div>' +
+    '<div class="modes" id="chats" style="margin-top:0">' + HATS.map(function (h) { return '<button data-ch="' + h[0] + '"' + (TALK.composeHat === h[0] ? ' class="on"' : '') + '>' + h[1] + ' ' + h[2] + '</button>'; }).join('') + '</div>' +
+    '<textarea id="tbody" placeholder="' + TK.sharePH + '" maxlength="2000"></textarea>' +
+    '<div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="tpost" style="margin:0">' + TK.post + '</button><button class="btn dark" id="tcancel" style="margin:0;width:auto;padding:0 16px">✕</button></div></div>';
+}
+function bindTalkTop() {
+  document.querySelectorAll('#thats [data-h]').forEach(function (b) { b.onclick = function () { TALK.hat = b.getAttribute('data-h'); talkList(); }; });
+  document.querySelectorAll('#tsort [data-s]').forEach(function (b) { b.onclick = function () { TALK.sort = b.getAttribute('data-s'); talkList(); }; });
+  if (el('topen')) el('topen').onclick = function () { TALK.composing = true; talkList(); };
+  if (el('tcancel')) el('tcancel').onclick = function () { TALK.composing = false; talkList(); };
+  document.querySelectorAll('#chats [data-ch]').forEach(function (b) { b.onclick = function () { TALK.composeHat = b.getAttribute('data-ch'); document.querySelectorAll('#chats [data-ch]').forEach(function (z) { z.classList.toggle('on', z === b); }); }; });
+  if (el('tpost')) el('tpost').onclick = function () {
+    var body = el('tbody').value.trim(); if (body.length < 2) return; el('tpost').textContent = '…';
+    api('/api/anon/post', { body: body, hat: TALK.composeHat, lang: ES ? 'es' : 'en' }).then(function (r) {
+      if (r && r.ok) { TALK.composing = false; talkList(); } else { el('tpost').textContent = TK.post; }
+    });
+  };
+}
+function talkCard(p) {
+  var h = hatMeta(p.hat), bn = TALK.boosted['post' + p.id];
+  return '<div class="apost" data-open="' + esc(p.id) + '"><div class="ahat">' + h[1] + ' ' + h[2] + ' · ' + timeAgo(p.ts) + '</div>' +
+    '<div class="abody">' + esc(p.body) + '</div>' +
+    '<div class="afoot"><button class="boost' + (bn ? ' on' : '') + '" data-boost="' + esc(p.id) + '">❤️‍🔥 ' + (p.boosts || 0) + '</button>' +
+    '<span>💬 ' + (p.replies || 0) + ' ' + TK.replies + '</span>' +
+    '<button data-report="' + esc(p.id) + '" style="margin-left:auto">⚑</button></div></div>';
+}
+function bindTalkCards() {
+  document.querySelectorAll('#tfeed [data-open]').forEach(function (c) { c.onclick = function (e) { if (e.target.closest('button')) return; TALK.post = { id: c.getAttribute('data-open') }; showTalk(); }; });
+  document.querySelectorAll('#tfeed [data-boost]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); talkBoost('post', b.getAttribute('data-boost'), b); }; });
+  document.querySelectorAll('#tfeed [data-report]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); talkReport('post', b.getAttribute('data-report'), b); }; });
+}
+function talkBoost(type, id, btn) {
+  if (!S.user) return;
+  var key = type + id; if (TALK.boosted[key]) return;
+  api('/api/anon/boost', { targetType: type, targetId: id }).then(function (r) {
+    if (r && r.ok) { TALK.boosted[key] = true; btn.classList.add('on'); btn.textContent = '❤️‍🔥 ' + (r.boosts != null ? r.boosts : ''); }
+  });
+}
+function talkReport(type, id, btn) {
+  if (!S.user) return;
+  api('/api/anon/report', { targetType: type, targetId: id }).then(function () { btn.textContent = '✓'; });
+}
+function talkThread() {
+  var pid = TALK.post.id;
+  main('<button class="btn dark" id="tback" style="margin:0 0 10px;width:auto;padding:0 16px">' + TK.back + '</button><div id="tthread"><div class="spin">' + T.loading + '</div></div>');
+  el('tback').onclick = function () { TALK.post = null; showTalk(); };
+  Promise.all([api('/api/anon/feed', { hat: '', sort: 'new' }), api('/api/anon/replies', { postId: pid })]).then(function (rs) {
+    var posts = (rs[0] && rs[0].posts) || [];
+    var p = posts.filter(function (z) { return z.id === pid; })[0];
+    var replies = (rs[1] && rs[1].replies) || [];
+    var head = p ? talkCardStatic(p) : '';
+    var help = (p && (p.hat === 'rough' || p.hat === 'vent')) ? '<div class="card center" style="padding:11px;border-color:var(--orange);margin-bottom:8px"><span class="muted" style="font-size:13px">' + TK.help + '</span></div>' : '';
+    var replyBox = S.user ? '<div class="tcompose" style="margin-top:10px"><textarea id="rbody" placeholder="' + TK.replyPH + '" maxlength="2000"></textarea><button class="btn" id="rpost" style="margin-top:8px">' + TK.reply + '</button></div>' : '<div class="card center muted" style="padding:12px;margin-top:10px">' + TK.needpost + '</div>';
+    var sun = replies.length ? replies.map(talkReplyCard).join('') : '<div class="center muted" style="padding:14px">' + TK.empty + '</div>';
+    el('tthread').innerHTML = head + help + '<div class="section">' + replies.length + ' ' + TK.replies + '</div>' + sun + replyBox;
+    bindThread(pid);
+  });
+}
+function talkCardStatic(p) {
+  var h = hatMeta(p.hat), bn = TALK.boosted['post' + p.id];
+  return '<div class="apost" style="cursor:default"><div class="ahat">' + h[1] + ' ' + h[2] + ' · ' + timeAgo(p.ts) + '</div><div class="abody">' + esc(p.body) + '</div>' +
+    '<div class="afoot"><button class="boost' + (bn ? ' on' : '') + '" data-tb="' + esc(p.id) + '">❤️‍🔥 ' + (p.boosts || 0) + '</button></div></div>';
+}
+function talkReplyCard(r) {
+  var bn = TALK.boosted['reply' + r.id];
+  return '<div class="tsun"><div class="sb">' + esc(r.body) + '</div><div class="sf"><button class="boost' + (bn ? ' on' : '') + '" data-rb="' + esc(r.id) + '">❤️‍🔥 ' + (r.boosts || 0) + '</button> · ' + timeAgo(r.ts) + ' · <button data-rr="' + esc(r.id) + '">' + TK.report + '</button></div></div>';
+}
+function bindThread(pid) {
+  document.querySelectorAll('#tthread [data-tb]').forEach(function (b) { b.onclick = function () { talkBoost('post', b.getAttribute('data-tb'), b); }; });
+  document.querySelectorAll('#tthread [data-rb]').forEach(function (b) { b.onclick = function () { talkBoost('reply', b.getAttribute('data-rb'), b); }; });
+  document.querySelectorAll('#tthread [data-rr]').forEach(function (b) { b.onclick = function () { talkReport('reply', b.getAttribute('data-rr'), b); }; });
+  if (el('rpost')) el('rpost').onclick = function () {
+    var body = el('rbody').value.trim(); if (body.length < 1) return; el('rpost').textContent = '…';
+    api('/api/anon/reply', { postId: pid, body: body, lang: ES ? 'es' : 'en' }).then(function (r) {
+      if (r && r.ok) { talkThread(); } else { el('rpost').textContent = TK.reply; }
+    });
+  };
+}
+
 /* ── PEOPLE (search + discovery, one-tap follow) ── */
 function showPeople() {
   setTab('people'); stopPoll();
@@ -1171,6 +1309,7 @@ function go(v) {
   if (v === 'feed') showFeed();
   else if (v === 'gym') showGym();
   else if (v === 'fitness') showFitness();
+  else if (v === 'talk') showTalk();
   else if (v === 'people') showPeople();
   else if (v === 'msgs') showMsgs();
   else showCall();
