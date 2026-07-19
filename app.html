@@ -1154,7 +1154,7 @@ function talkCard(p) {
     '<button data-report="' + esc(p.id) + '" style="margin-left:auto">⚑</button></div></div>';
 }
 function bindTalkCards() {
-  document.querySelectorAll('#tfeed [data-open]').forEach(function (c) { c.onclick = function (e) { if (e.target.closest('button')) return; TALK.post = { id: c.getAttribute('data-open') }; showTalk(); }; });
+  document.querySelectorAll('#tfeed [data-open]').forEach(function (c) { c.onclick = function (e) { if (e.target.closest('button')) return; TALK.post = { id: c.getAttribute('data-open') }; setHash('talk/' + TALK.post.id); showTalk(); }; });
   document.querySelectorAll('#tfeed [data-boost]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); talkBoost('post', b.getAttribute('data-boost'), b); }; });
   document.querySelectorAll('#tfeed [data-report]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); talkReport('post', b.getAttribute('data-report'), b); }; });
 }
@@ -1172,7 +1172,7 @@ function talkReport(type, id, btn) {
 function talkThread() {
   var pid = TALK.post.id;
   main('<button class="btn dark" id="tback" style="margin:0 0 10px;width:auto;padding:0 16px">' + TK.back + '</button><div id="tthread"><div class="spin">' + T.loading + '</div></div>');
-  el('tback').onclick = function () { TALK.post = null; showTalk(); };
+  el('tback').onclick = function () { TALK.post = null; setHash('talk'); showTalk(); };
   Promise.all([api('/api/anon/feed', { hat: '', sort: 'new' }), api('/api/anon/replies', { postId: pid })]).then(function (rs) {
     var posts = (rs[0] && rs[0].posts) || [];
     var p = posts.filter(function (z) { return z.id === pid; })[0];
@@ -1327,8 +1327,14 @@ function setTab(v) {
     b.classList.toggle('on', b.getAttribute('data-v') === v);
   });
 }
+// 🔗 Deep links: the URL hash mirrors the current tab (and open Talk thread), so
+// getbrightsideapp.com/app.html#talk or #fitness or #talk/<postId> lands right there.
+// Every share is a direct link into the app — no download, no app-store detour.
+function setHash(h) { try { if ((location.hash || '').replace(/^#/, '') !== h) history.replaceState(null, '', location.pathname + location.search + (h ? '#' + h : '')); } catch (e) {} }
+var TABS = ['feed', 'gym', 'fitness', 'talk', 'people', 'msgs', 'call'];
 function go(v) {
   stopPoll();
+  setHash(v);
   if (v === 'feed') showFeed();
   else if (v === 'gym') showGym();
   else if (v === 'fitness') showFitness();
@@ -1337,6 +1343,14 @@ function go(v) {
   else if (v === 'msgs') showMsgs();
   else showCall();
 }
+function routeHash() {
+  var h = (location.hash || '').replace(/^#/, ''); if (!h) return false;
+  var parts = h.split('/'), v = parts[0];
+  if (v === 'talk' && parts[1]) { TALK.post = { id: parts[1] }; stopPoll(); setTab('talk'); talkThread(); return true; }
+  if (TABS.indexOf(v) >= 0) { go(v); return true; }
+  return false;
+}
+window.addEventListener('hashchange', function () { routeHash(); });
 document.querySelectorAll('nav button,#side button[data-v]').forEach(function (b) {
   b.onclick = function () { go(b.getAttribute('data-v')); };
 });
@@ -1348,7 +1362,7 @@ function boot() {
   el('rail').style.display = '';
   el('who').textContent = S.user ? '@' + S.user : '👀 ' + T.guestWho;
   loadRail();
-  showFeed();
+  if (!routeHash()) showFeed();
 }
 boot();
 </script>
