@@ -38,6 +38,9 @@ p{font-size:15px;line-height:1.5;color:#6b6076;margin-bottom:6px}
   // page; anything else gets a friendly landing instead of a dead end.
   var es = /^es/i.test(navigator.language || '');
   var path = location.pathname || '';
+  // 🌐 Clean web-app URL for marketing: getbrightsideapp.com/web → app.html.
+  // (Facebook post July 19 — "/web" is speakable; "/app.html" is not.)
+  if (/^\/(web|app)\/?$/i.test(path)) { location.replace('/app.html'); return; }
   var m = path.match(/^\/(call|join)\/([A-Za-z0-9._~-]{4,200})/);
   var title = document.getElementById('title');
   var sub = document.getElementById('sub');
