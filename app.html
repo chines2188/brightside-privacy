@@ -128,6 +128,12 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .wex:last-child{border-bottom:0}
 .wex .wn{font-weight:800;font-size:14px;flex:1;text-transform:capitalize}
 .wex .ws{color:var(--muted);font-weight:800;font-size:13px}
+.wex[data-add]{cursor:pointer}
+.wex .fx{border:0;background:none;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
+.tile .tv{font-weight:900;font-size:17px}
+.tile .tl{color:var(--muted);font-size:12px;margin-top:2px;text-transform:capitalize}
 .post .bigheart.pop{animation:pop .8s ease forwards}
 @keyframes pop{0%{opacity:0;transform:scale(.4)}25%{opacity:1;transform:scale(1.15)}55%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
 .post .actions{display:flex;align-items:center;gap:16px;padding:10px 14px 0}
@@ -788,7 +794,7 @@ function pvRender() {
 // today's workout, browse the exercise library. Leaderboard is server-backed so it
 // syncs 1:1 with the phone. Workout + library proxy the app's WorkoutX API.
 var FT = ES
-  ? { sub:['🏆 Tabla','🏋️ Hoy','📚 Ejercicios'],
+  ? { sub:['☀️ Hoy','🏆 Tabla','🏋️ Entreno','📚 Ejercicios','🍎 Comida'],
       board:{miles:'Millas',workouts:'Entrenos',minutes:'Minutos',streak:'Racha',calories:'Calorías',steps:'Pasos'},
       units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
       you:'tú', global:'Global', friendsW:'Amigos',
@@ -797,8 +803,13 @@ var FT = ES
       goals:[['strength','Fuerza'],['hypertrophy','Músculo'],['endurance','Resistencia'],['fatloss','Quemar']],
       searchEx:'Buscar un ejercicio…', wlimit:'Generaste muchos hoy — vuelve mañana ☀️',
       wfail:'No se pudo generar ahora. Pruébalo en la app ☀️',
-      exempty:'Escribe para buscar entre miles de ejercicios 📚' }
-  : { sub:['🏆 Board','🏋️ Today','📚 Exercises'],
+      exempty:'Escribe para buscar entre miles de ejercicios 📚',
+      myweek:'Tu semana ☀️', signinsee:'Entra en la app para ver tu semana aquí ☀️',
+      eaten:'Comido hoy', noeaten:'Aún no registras comida hoy — agrégala abajo ☀️',
+      addfood:'Buscar comida', describe:'Descríbela (ej. 2 huevos y tostada)',
+      foodlocal:'Se guarda en este navegador — aún no se sincroniza con el teléfono',
+      clearday:'Limpiar el día', nodata:'—' }
+  : { sub:['☀️ Today','🏆 Board','🏋️ Workout','📚 Exercises','🍎 Food'],
       board:{miles:'Miles',workouts:'Workouts',minutes:'Minutes',streak:'Streak',calories:'Calories',steps:'Steps'},
       units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
       you:'you', global:'Global', friendsW:'Friends',
@@ -807,7 +818,12 @@ var FT = ES
       goals:[['strength','Strength'],['hypertrophy','Muscle'],['endurance','Endurance'],['fatloss','Fat loss']],
       searchEx:'Search an exercise…', wlimit:'You generated a lot today — back tomorrow ☀️',
       wfail:"Couldn't generate right now. Try it in the app ☀️",
-      exempty:'Type to search thousands of exercises 📚' };
+      exempty:'Type to search thousands of exercises 📚',
+      myweek:'Your week ☀️', signinsee:'Log in on the app to see your week here ☀️',
+      eaten:'Eaten today', noeaten:'No food logged yet today — add some below ☀️',
+      addfood:'Search food', describe:'Describe it (e.g. 2 eggs and toast)',
+      foodlocal:"Saved in this browser — doesn't sync to the phone yet",
+      clearday:'Clear the day', nodata:'—' };
 var FIT = { sub:0, board:'miles', friends:false, goal:'strength', data:null };
 // GET helper for the WorkoutX-backed endpoints (they take query strings + a token header).
 function apiGet(path) {
@@ -822,9 +838,84 @@ function showFitness() {
   document.querySelectorAll('#fitnav button').forEach(function (b) {
     b.onclick = function () { FIT.sub = +b.getAttribute('data-s'); showFitness(); };
   });
-  if (FIT.sub === 0) fitBoard();
-  else if (FIT.sub === 1) fitWorkout();
-  else fitLibrary();
+  if (FIT.sub === 0) fitToday();
+  else if (FIT.sub === 1) fitBoard();
+  else if (FIT.sub === 2) fitWorkout();
+  else if (FIT.sub === 3) fitLibrary();
+  else fitFood();
+}
+// ☀️ Today — your week at a glance (your own rank/value per board + today's food).
+function fitToday() {
+  if (!S.user) {
+    el('fitbody').innerHTML = '<div class="card center" style="padding:24px"><div class="sun">☀️</div><p class="muted" style="margin-top:8px">' + FT.signinsee + '</p><a class="btn" href="https://apps.apple.com/app/id6774821890">' + T.getapp + '</a></div>';
+    return;
+  }
+  el('fitbody').innerHTML = '<div class="spin">' + T.loading + '</div>';
+  api('/api/competition/fitness', { username: S.user }).then(function (r) {
+    var d = r || {};
+    var defs = [['streak','🔥'],['steps','👟'],['calories','🍎'],['miles','🏃'],['workouts','💪'],['minutes','⏱']];
+    var eaten = foodDay().items.reduce(function (a, it) { return a + (it.cal || 0); }, 0);
+    var tiles = defs.map(function (b) {
+      var blk = d[b[0]] || {};
+      var me = ((blk.friends || []).concat(blk.top || [])).filter(function (x) { return x.isMe; })[0];
+      var unit = FT.units[b[0]] || '';
+      var val = me ? (Number(me.score) || 0).toLocaleString() + (unit ? ' ' + unit : '') : FT.nodata;
+      var rk = me ? ' · #' + me.rank : '';
+      return '<div class="tile"><div class="tv">' + b[1] + ' ' + val + '</div><div class="tl">' + FT.board[b[0]] + rk + '</div></div>';
+    }).join('');
+    tiles += '<div class="tile"><div class="tv">🍽 ' + eaten.toLocaleString() + ' cal</div><div class="tl">' + FT.eaten + '</div></div>';
+    el('fitbody').innerHTML = '<div class="section">' + FT.myweek + '</div><div class="tiles">' + tiles + '</div>';
+  }).catch(function () { el('fitbody').innerHTML = '<div class="card center muted">' + T.empty + '</div>'; });
+}
+// 🍎 Food — search (USDA) or describe-with-AI, logged to a browser-local day.
+function foodKey() { return 'bsw_food_' + new Date().toISOString().slice(0, 10); }
+function foodDay() { try { return JSON.parse(localStorage.getItem(foodKey())) || { items: [] }; } catch (e) { return { items: [] }; } }
+function foodSave(d) { try { localStorage.setItem(foodKey(), JSON.stringify(d)); } catch (e) {} }
+function foodAdd(it) { var d = foodDay(); d.items.push(it); foodSave(d); }
+function fitFood() {
+  var d = foodDay();
+  var tot = d.items.reduce(function (a, it) { return { cal: a.cal + (it.cal || 0), p: a.p + (it.p || 0), f: a.f + (it.f || 0), c: a.c + (it.c || 0) }; }, { cal: 0, p: 0, f: 0, c: 0 });
+  var list = d.items.length ? d.items.map(function (it, i) {
+    return '<div class="wex"><div class="wn">' + esc(it.name) + '</div><div class="ws">' + (it.cal || 0) + ' cal</div><button class="fx" data-fx="' + i + '">✕</button></div>';
+  }).join('') : '<div class="center muted" style="padding:16px">' + FT.noeaten + '</div>';
+  el('fitbody').innerHTML =
+    '<div class="card center" style="padding:16px"><div class="tv" style="font-size:30px">🍽 ' + tot.cal.toLocaleString() + ' cal</div>' +
+    '<div class="muted" style="font-size:12.5px;margin-top:2px">P ' + tot.p + 'g · F ' + tot.f + 'g · C ' + tot.c + 'g</div></div>' +
+    '<input id="fq" placeholder="' + FT.addfood + '…" autocomplete="off"><div id="fres"></div>' +
+    '<div style="display:flex;gap:6px;margin-top:8px"><input id="fdesc" placeholder="' + FT.describe + '" autocomplete="off" style="flex:1;margin:0"><button class="btn" id="fpar" style="margin:0;width:auto;padding:0 15px">✨</button></div>' +
+    '<div class="card" style="padding:4px 0;margin-top:10px">' + list + '</div>' +
+    (d.items.length ? '<button class="btn dark" id="fclr" style="margin-top:8px">' + FT.clearday + '</button>' : '') +
+    '<p class="muted center" style="font-size:11px;margin-top:8px">' + FT.foodlocal + '</p>';
+  var timer = null;
+  el('fq').oninput = function () {
+    var q = el('fq').value.trim(); clearTimeout(timer);
+    if (q.length < 2) { el('fres').innerHTML = ''; return; }
+    timer = setTimeout(function () {
+      el('fres').innerHTML = '<div class="spin">' + T.loading + '</div>';
+      api('/api/food/search', { q: q }).then(function (r) {
+        var rs = (r && r.results) || [];
+        el('fres').innerHTML = '<div class="card" style="padding:4px 0">' + (rs.length ? rs.map(function (x) {
+          return '<div class="wex" data-add="' + encodeURIComponent(JSON.stringify({ name: x.name, cal: x.cal, p: x.p, f: x.f, c: x.c })) + '"><div class="wn" style="text-transform:capitalize">' + esc(x.name) + (x.brand ? ' · ' + esc(x.brand) : '') + '</div><div class="ws">' + x.cal + ' cal +</div></div>';
+        }).join('') : '<div class="center muted" style="padding:12px">' + T.none + '</div>') + '</div>';
+        document.querySelectorAll('#fres [data-add]').forEach(function (b) {
+          b.onclick = function () { try { foodAdd(JSON.parse(decodeURIComponent(b.getAttribute('data-add')))); } catch (e) {} fitFood(); };
+        });
+      });
+    }, 350);
+  };
+  el('fpar').onclick = function () {
+    if (!S.user) { el('fpar').textContent = '🔒'; return; }
+    var t = el('fdesc').value.trim(); if (t.length < 3) return;
+    el('fpar').textContent = '…';
+    api('/api/food/parse', { username: S.user, text: t, lang: ES ? 'es' : 'en' }).then(function (r) {
+      if (r && r.ok && r.items && r.items.length) { r.items.forEach(function (it) { foodAdd(it); }); fitFood(); }
+      else { el('fpar').textContent = '✨'; }
+    });
+  };
+  document.querySelectorAll('#fitbody [data-fx]').forEach(function (b) {
+    b.onclick = function () { var dd = foodDay(); dd.items.splice(+b.getAttribute('data-fx'), 1); foodSave(dd); fitFood(); };
+  });
+  if (el('fclr')) el('fclr').onclick = function () { foodSave({ items: [] }); fitFood(); };
 }
 function fitBoard() {
   el('fitbody').innerHTML = '<div class="spin">' + T.loading + '</div>';
