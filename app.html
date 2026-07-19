@@ -865,13 +865,15 @@ function fitWorkout() {
     el('wout').innerHTML = '<div class="spin">' + T.loading + '</div>';
     apiGet('/api/workout/generate?goal=' + encodeURIComponent(FIT.goal || 'strength') + '&duration=30&level=beginner').then(function (r) {
       if (!r || !r.ok) { el('wout').innerHTML = '<div class="card center muted">' + (r && r.error === 'limit' ? FT.wlimit : FT.wfail) + '</div>'; return; }
-      var w = r.workout || {}; var ex = w.exercises || w.items || (Array.isArray(w) ? w : []);
+      var w = r.workout || {}; if (w.data && !w.exercises && !Array.isArray(w)) w = w.data;
+      var ex = w.exercises || w.items || (Array.isArray(w) ? w : []);
       var rows = ex.length ? ex.map(function (e) {
-        var nm = e.name || e.exercise || e.title || '';
+        var nm = (e.exercise && e.exercise.name) || e.name || e.title || '';
         var bits = [];
-        if (e.sets) bits.push(e.sets + '×' + (e.reps != null ? e.reps : ''));
+        if (e.sets) bits.push(e.sets + ' × ' + (e.reps != null ? e.reps : ''));
         else if (e.reps != null) bits.push(String(e.reps));
-        if (e.duration) bits.push(String(e.duration));
+        if (e.restSeconds) bits.push(e.restSeconds + 's');
+        else if (e.duration) bits.push(String(e.duration));
         return '<div class="wex"><div class="wn">' + esc(String(nm)) + '</div><div class="ws">' + esc(bits.join(' · ')) + '</div></div>';
       }).join('') : '<div class="center muted" style="padding:18px">' + FT.wfail + '</div>';
       el('wout').innerHTML = '<div class="card" style="padding:4px 0">' + rows + '</div>';
@@ -888,7 +890,8 @@ function fitLibrary() {
     timer = setTimeout(function () {
       el('exres').innerHTML = '<div class="spin">' + T.loading + '</div>';
       apiGet('/api/workout/exercises?name=' + encodeURIComponent(q) + '&limit=12').then(function (r) {
-        var ex = (r && r.exercises) || [];
+        var box = r && r.exercises;
+        var ex = (box && (box.data || (Array.isArray(box) ? box : []))) || [];
         if (!ex.length) { el('exres').innerHTML = '<div class="card center muted">' + T.none + '</div>'; return; }
         el('exres').innerHTML = '<div class="exgrid">' + ex.map(function (e) {
           var id = e.id || e.exerciseId || e.gifId || '';
