@@ -107,6 +107,7 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .post img.media{width:100%;display:block;background:#00000010;max-height:640px;object-fit:cover}
 .post .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:46px;text-shadow:0 2px 12px rgba(0,0,0,.5)}
 .post .bigheart{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px;opacity:0;pointer-events:none;filter:drop-shadow(0 4px 16px rgba(0,0,0,.4))}
+.post .mutepill{position:absolute;right:10px;bottom:10px;font-size:15px;background:rgba(0,0,0,.5);color:#fff;border-radius:999px;padding:5px 9px;pointer-events:none;backdrop-filter:blur(4px)}
 .post .bigheart.pop{animation:pop .8s ease forwards}
 @keyframes pop{0%{opacity:0;transform:scale(.4)}25%{opacity:1;transform:scale(1.15)}55%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
 .post .actions{display:flex;align-items:center;gap:16px;padding:10px 14px 0}
@@ -165,6 +166,7 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
   <aside id="side">
     <div class="logo">☀️ Bright Side</div>
     <button data-v="feed"><span class="ic">☀️</span><span data-i18n="feed">Feed</span></button>
+    <button data-v="gym"><span class="ic">💪</span><span data-i18n="gym">Gym</span></button>
     <button data-v="people"><span class="ic">🔍</span><span data-i18n="people">People</span></button>
     <button data-v="msgs"><span class="ic">💬</span><span data-i18n="msgs">Messages</span></button>
     <button data-v="call"><span class="ic">📞</span><span data-i18n="call">Call</span></button>
@@ -182,6 +184,7 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 </div>
 <nav id="nav" class="hide">
   <button data-v="feed">☀️ <span data-i18n="feed">Feed</span></button>
+  <button data-v="gym">💪 <span data-i18n="gym">Gym</span></button>
   <button data-v="people">🔍 <span data-i18n="people">People</span></button>
   <button data-v="msgs">💬 <span data-i18n="msgs">Messages</span></button>
   <button data-v="call">📞 <span data-i18n="call">Call</span></button>
@@ -393,9 +396,7 @@ function showFeed() {
   // feed), the social moments feed (4 modes), and the Gym feed (workout posts).
   var bodyReq = S.mode === 'news'
     ? api('/api/stories', { count: 12, category: 'all' }).catch(function(){ return { stories: [] }; })
-    : S.mode === 'gym'
-      ? api('/api/fitness/list', { username: S.user, mode: 'all', channel: 'fitness' }).catch(function(){ return { posts: [] }; })
-      : api('/api/moments/list', { username: S.user, mode: S.mode }).catch(function(){ return { posts: [] }; });
+    : api('/api/moments/list', { username: S.user, mode: S.mode }).catch(function(){ return { posts: [] }; });
   Promise.all([
     api('/api/status/feed', { viewer: S.user }).catch(function(){ return { groups: [] }; }),
     bodyReq
@@ -411,7 +412,7 @@ function showFeed() {
           '</div><div class="lbl">' + (g.welcome ? '👋 ' : '') + esc(g.name || '@' + g.username) + '</div></button>';
       }).join('') + '</div>';
     }
-    var modes = [['news', '☀️ ' + T.news], ['all', '🌍 ' + T.foryou], ['following', '👥 ' + T.following], ['funny', T.funny], ['motivation', T.rise], ['gym', '💪 ' + T.gym]];
+    var modes = [['news', '☀️ ' + T.news], ['all', '🌍 ' + T.foryou], ['following', '👥 ' + T.following], ['funny', T.funny], ['motivation', T.rise]];
     html += '<div class="modes">' + modes.map(function (m) {
       return '<button data-m="' + m[0] + '"' + (S.mode === m[0] ? ' class="on"' : '') + '>' + m[1] + '</button>';
     }).join('') + '</div>';
@@ -420,10 +421,6 @@ function showFeed() {
       var stories = (rs[1] && rs[1].stories) || [];
       if (!stories.length) html += '<div class="card center muted">' + T.empty + '</div>';
       html += stories.map(renderStory).join('');
-    } else if (S.mode === 'gym') {
-      posts = (rs[1] && rs[1].posts) || [];
-      if (!posts.length) html += '<div class="card center muted">' + T.empty + '</div>';
-      html += posts.slice(0, 40).map(renderFitPost).join('');
     } else {
       posts = (rs[1] && rs[1].posts) || [];
       if (!posts.length) html += '<div class="card center muted">' + T.empty + '</div>';
@@ -438,7 +435,21 @@ function showFeed() {
     });
     bindPosts(posts);
     bindFollows();
-    // 💪 Gym videos: attach the source on first tap (HLS-aware via hls.js) so
+  });
+}
+/* ── 💪 GYM — its own tab (the main selling point gets a front door) ── */
+function showGym() {
+  setTab('gym'); stopPoll();
+  main('<div class="spin">' + T.loading + '</div>');
+  api('/api/fitness/list', { username: S.user, mode: 'all', channel: 'fitness' }).catch(function(){ return { posts: [] }; }).then(function (r) {
+    var posts = (r && r.posts) || [];
+    var html = '';
+    if (!posts.length) html += '<div class="card center muted">' + T.empty + '</div>';
+    html += posts.slice(0, 40).map(renderFitPost).join('');
+    main(html);
+    bindPosts(posts);
+    bindFollows();
+    // Gym videos: attach the source on first tap (HLS-aware via hls.js) so
     // they play sharp in every browser instead of erroring outside Safari.
     document.querySelectorAll('video.fitvid').forEach(function (v) {
       v.addEventListener('pointerdown', function () {
@@ -497,8 +508,13 @@ function renderPost(p, i) {
   var likes = (p.likes || 0);
   var media = '';
   if (p.kind === 'video') {
-    media = '<div class="mediawrap" data-i="' + i + '" data-open="https://brightsidestreams.com/m/' + esc(p.id) + '">' +
-      (p.posterUrl ? '<img class="media" src="' + esc(hiRes(p.posterUrl, 1040)) + '" alt="" loading="lazy">' : '<img class="media" alt="" style="min-height:220px">') +
+    // Autoplay muted inline while in view (IntersectionObserver in armFeedVideos),
+    // HLS-aware so it plays sharp in every browser — not a dead poster anymore.
+    var vpos = p.posterUrl ? esc(hiRes(p.posterUrl, 1040)) : '';
+    media = '<div class="mediawrap" data-i="' + i + '">' +
+      '<video class="media feedvid" muted loop playsinline preload="none" ' +
+      (vpos ? 'poster="' + vpos + '" ' : '') +
+      'data-src="' + esc(p.mediaUrl || '') + '" style="width:100%;display:block;background:#000;min-height:220px"></video>' +
       '<div class="play">▶️</div><div class="bigheart">❤️</div></div>';
   } else {
     var urls = (p.mediaUrls && p.mediaUrls.length ? p.mediaUrls : [p.mediaUrl]).filter(Boolean);
@@ -535,8 +551,10 @@ function bindPosts(posts) {
   document.querySelectorAll('.lk').forEach(function (b) {
     b.onclick = function () { toggleLike(b.getAttribute('data-id'), b.hasAttribute('data-fit')); };
   });
-  document.querySelectorAll('.mediawrap').forEach(function (w) {
-    var open = w.getAttribute('data-open');
+  // Flatten every post's media into one list (same order as the cards render) so
+  // the full-screen viewer can auto-advance photo→video→photo across the whole feed.
+  S.pv = buildPvList(posts);
+  document.querySelectorAll('.mediawrap').forEach(function (w, idx) {
     var lastTap = 0;
     w.addEventListener('click', function () {
       var now = Date.now();
@@ -549,10 +567,53 @@ function bindPosts(posts) {
         lastTap = 0;
         return;
       }
-      lastTap = now;
-      if (open) setTimeout(function () { if (lastTap && Date.now() - lastTap >= 350) { window.open(open, '_blank', 'noopener'); lastTap = 0; } }, 360);
+      lastTap = now;   // single tap → open the immersive full-screen viewer at this item
+      setTimeout(function () { if (lastTap && Date.now() - lastTap >= 350) { openPostViewer(idx); lastTap = 0; } }, 360);
     });
   });
+  armFeedVideos();
+}
+// Build the flattened media list — must mirror renderPost's DOM order exactly:
+// a video post = 1 item; a photo post = one item per image (up to 4).
+function buildPvList(posts) {
+  var list = [];
+  (posts || []).slice(0, 40).forEach(function (p) {
+    if (p.kind === 'video') {
+      list.push({ kind: 'video', url: p.mediaUrl || '', poster: p.posterUrl || '', p: p });
+    } else {
+      var urls = (p.mediaUrls && p.mediaUrls.length ? p.mediaUrls : [p.mediaUrl]).filter(Boolean);
+      urls.slice(0, 4).forEach(function (u) { list.push({ kind: 'photo', url: u, poster: '', p: p }); });
+    }
+  });
+  return list;
+}
+// ▶️ Feed videos autoplay muted while in view, pause when scrolled away, and lazily
+//    attach their (HLS-aware) source the first time they're seen. Only the in-view
+//    one streams — cost-conscious. Single tap on the video toggles sound.
+function armFeedVideos() {
+  var vids = document.querySelectorAll('video.feedvid');
+  if (!vids.length) return;
+  if (!('IntersectionObserver' in window)) return;   // old browser: poster stays, tap opens viewer
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      var v = en.target;
+      if (en.isIntersecting && en.intersectionRatio >= 0.6) {
+        if (!v.getAttribute('data-armed')) {
+          v.setAttribute('data-armed', '1');
+          var src = v.getAttribute('data-src') || '';
+          if (/\.m3u8/i.test(src)) playHls(v, src); else if (src) v.src = src;
+        }
+        vids.forEach(function (o) { if (o !== v) o.pause(); });   // one at a time
+        v.play().then(function () {
+          var ov = v.parentNode && v.parentNode.querySelector('.play');
+          if (ov) ov.style.display = 'none';
+        }).catch(function () {});
+      } else {
+        v.pause();
+      }
+    });
+  }, { threshold: [0, 0.6, 1] });
+  vids.forEach(function (v) { io.observe(v); });
 }
 function isLiked(id) {
   if (S.liked[id] != null) return S.liked[id];
@@ -635,6 +696,67 @@ function svRender() {
       t += 100;
       bar.style.width = Math.min(100, (t / DUR) * 100) + '%';
       if (t >= DUR) svNext();
+    }, 100);
+  }
+}
+
+/* ── FEED POST VIEWER (full-screen, auto-advances photo→video like stories) ── */
+// Reuses the #sv overlay + CSS. Tapping any feed media opens here at that item;
+// a video plays with sound and, when it ends, auto-advances to the next post's
+// media; a photo holds 5s then advances. Left/right tap zones + arrow keys navigate.
+var PV = { i: 0, timer: null };
+function openPostViewer(i) {
+  if (!S.pv || !S.pv.length) return;
+  PV.i = Math.max(0, Math.min(i, S.pv.length - 1));
+  el('sv').classList.remove('hide');
+  document.addEventListener('keydown', pvKeys);
+  pvRender();
+}
+function closePV() {
+  el('sv').classList.add('hide');
+  el('sv').innerHTML = '';
+  if (PV.timer) { clearInterval(PV.timer); PV.timer = null; }
+  document.removeEventListener('keydown', pvKeys);
+}
+function pvKeys(e) {
+  if (e.key === 'Escape') closePV();
+  else if (e.key === 'ArrowRight') pvNext();
+  else if (e.key === 'ArrowLeft') pvPrev();
+}
+function pvNext() { if (PV.i < S.pv.length - 1) { PV.i++; pvRender(); } else closePV(); }
+function pvPrev() { if (PV.i > 0) { PV.i--; pvRender(); } }
+function pvRender() {
+  if (PV.timer) { clearInterval(PV.timer); PV.timer = null; }
+  var it = S.pv[PV.i]; if (!it) return closePV();
+  var p = it.p || {}, vid = it.kind === 'video', u = it.url || it.poster || '';
+  el('sv').innerHTML = '<div class="frame">' +
+    '<div class="bars"><i><b style="width:0"></b></i></div>' +
+    '<div class="svhead">' + avatarHtml(p) +
+    '<span class="nm">' + esc(p.name || '@' + p.username) + (p.ts ? ' · ' + timeAgo(p.ts) : '') +
+    '<span style="opacity:.7;font-weight:600"> · ' + (PV.i + 1) + '/' + S.pv.length + '</span></span>' +
+    '<button class="x" id="pvx">✕</button></div>' +
+    (vid
+      ? '<video class="media" id="pvm" autoplay playsinline ' + (it.poster ? 'poster="' + esc(hiRes(it.poster, 860)) + '"' : '') + '></video>'
+      : '<img class="media" src="' + esc(hiRes(u, 860)) + '" alt="">') +
+    (p.caption ? '<div class="svcap" style="position:absolute;left:12px;right:12px;bottom:14px;z-index:5;color:#fff;font-weight:700;font-size:14px;line-height:1.4;text-shadow:0 1px 6px rgba(0,0,0,.75)"><b>' + esc(p.username) + '</b> ' + esc(p.caption) + '</div>' : '') +
+    '<div class="zone l" id="pvl"></div><div class="zone r" id="pvr"></div></div>';
+  el('pvx').onclick = closePV;
+  el('pvl').onclick = pvPrev;
+  el('pvr').onclick = pvNext;
+  var bar = el('sv').querySelector('.bars i b');
+  if (vid) {
+    var v = el('pvm');
+    if (/\.m3u8/i.test(u)) playHls(v, u); else v.src = u;   // full-screen, with sound
+    v.onended = pvNext;
+    v.onerror = function () { setTimeout(pvNext, 2500); };
+    PV.timer = setInterval(function () {
+      if (v.duration) bar.style.width = Math.min(100, (v.currentTime / v.duration) * 100) + '%';
+    }, 100);
+  } else {
+    var t = 0, DUR = 5000;
+    PV.timer = setInterval(function () {
+      t += 100; bar.style.width = Math.min(100, (t / DUR) * 100) + '%';
+      if (t >= DUR) pvNext();
     }, 100);
   }
 }
@@ -763,6 +885,7 @@ function setTab(v) {
 function go(v) {
   stopPoll();
   if (v === 'feed') showFeed();
+  else if (v === 'gym') showGym();
   else if (v === 'people') showPeople();
   else if (v === 'msgs') showMsgs();
   else showCall();
