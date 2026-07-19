@@ -236,6 +236,30 @@ function avatarHtml(p, extra) {
   return '<div class="av ' + (extra || '') + '">' + (photo ? '<img src="' + esc(photo) + '" alt="" loading="lazy">' : (emoji ? '<span style="font-size:20px">' + esc(emoji) + '</span>' : esc(letter))) + '</div>';
 }
 function isVid(u){ return /\.(mp4|mov|webm|m3u8)(\?|$)/i.test(String(u||'')); }
+// 🔍 Sharpness fix (July 19): Cloudflare Stream's bare thumbnail.jpg is a small
+// soft frame — stretched to a story screen it looks fuzzy. The endpoint accepts
+// size params, so ask for the resolution we actually display (2x for retina).
+function hiRes(u, w) {
+  u = String(u || '');
+  if (/cloudflarestream\.com\/[^/]+\/thumbnails\/thumbnail\.jpg/i.test(u)) {
+    return u.split('?')[0] + '?width=' + (w || 720) + '&fit=cover';
+  }
+  return u;
+}
+// ▶️ HLS everywhere: Safari plays .m3u8 natively; Chrome/Firefox need hls.js
+// (loaded lazily from CDN only when a story video actually plays).
+function playHls(v, src) {
+  try {
+    if (v.canPlayType('application/vnd.apple.mpegurl')) { v.src = src; return; }
+    var boot = function () { try { var h = new Hls(); h.loadSource(src); h.attachMedia(v); } catch (e) {} };
+    if (window.Hls) return boot();
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js';
+    s.onload = boot;
+    s.onerror = function () { v.src = src; };   // last resort: native attempt
+    document.head.appendChild(s);
+  } catch (e) { v.src = src; }
+}
 
 /* ── FOLLOW (works from any list: feed, rail, people) ── */
 function bindFollows(root) {
@@ -383,7 +407,7 @@ function showFeed() {
         var it = (g.items && g.items[g.items.length - 1]) || {};
         var pic = it.posterUrl || (!isVid(it.mediaUrl) && it.mediaUrl) || g.photoUrl || '';
         return '<button class="story" data-g="' + i + '"><div class="ring">' +
-          (pic ? '<img src="' + esc(pic) + '" alt="" loading="lazy">' : '<div class="ph">☀️</div>') +
+          (pic ? '<img src="' + esc(hiRes(pic, 148)) + '" alt="" loading="lazy">' : '<div class="ph">☀️</div>') +
           '</div><div class="lbl">' + (g.welcome ? '👋 ' : '') + esc(g.name || '@' + g.username) + '</div></button>';
       }).join('') + '</div>';
     }
@@ -414,6 +438,17 @@ function showFeed() {
     });
     bindPosts(posts);
     bindFollows();
+    // 💪 Gym videos: attach the source on first tap (HLS-aware via hls.js) so
+    // they play sharp in every browser instead of erroring outside Safari.
+    document.querySelectorAll('video.fitvid').forEach(function (v) {
+      v.addEventListener('pointerdown', function () {
+        if (v.getAttribute('data-armed')) return;
+        v.setAttribute('data-armed', '1');
+        var src = v.getAttribute('data-src') || '';
+        if (/\.m3u8/i.test(src)) playHls(v, src); else v.src = src;
+        setTimeout(function () { v.play().catch(function () {}); }, 150);
+      });
+    });
   });
 }
 // ☀️ Good-news story card (the app's main feed, on the web)
@@ -436,8 +471,8 @@ function renderFitPost(p) {
   var liked = !!S.liked['f' + p.id];
   var media = '';
   if (p.kind === 'video' && p.mediaUrl) {
-    media = '<video class="media" controls preload="none" playsinline style="width:100%;display:block" ' +
-      (p.posterUrl ? 'poster="' + esc(p.posterUrl) + '" ' : '') + 'src="' + esc(p.mediaUrl) + '"></video>';
+    media = '<video class="media fitvid" controls preload="none" playsinline style="width:100%;display:block" ' +
+      (p.posterUrl ? 'poster="' + esc(hiRes(p.posterUrl, 1040)) + '" ' : '') + 'data-src="' + esc(p.mediaUrl) + '"></video>';
   } else {
     var urls = (p.mediaUrls && p.mediaUrls.length ? p.mediaUrls : [p.mediaUrl]).filter(Boolean);
     media = urls.slice(0, 4).map(function (u, k) {
@@ -463,7 +498,7 @@ function renderPost(p, i) {
   var media = '';
   if (p.kind === 'video') {
     media = '<div class="mediawrap" data-i="' + i + '" data-open="https://brightsidestreams.com/m/' + esc(p.id) + '">' +
-      (p.posterUrl ? '<img class="media" src="' + esc(p.posterUrl) + '" alt="" loading="lazy">' : '<img class="media" alt="" style="min-height:220px">') +
+      (p.posterUrl ? '<img class="media" src="' + esc(hiRes(p.posterUrl, 1040)) + '" alt="" loading="lazy">' : '<img class="media" alt="" style="min-height:220px">') +
       '<div class="play">▶️</div><div class="bigheart">❤️</div></div>';
   } else {
     var urls = (p.mediaUrls && p.mediaUrls.length ? p.mediaUrls : [p.mediaUrl]).filter(Boolean);
@@ -579,8 +614,8 @@ function svRender() {
     '<div class="svhead">' + avatarHtml(g) + '<span class="nm">' + (g.welcome ? '👋 ' : '') + esc(g.name || '@' + g.username) + (it.ts ? ' · ' + timeAgo(it.ts) : '') + '</span>' +
     '<button class="x" id="svx">✕</button></div>' +
     (vid
-      ? '<video class="media" id="svm" src="' + esc(u) + '" autoplay playsinline ' + (it.posterUrl ? 'poster="' + esc(it.posterUrl) + '"' : '') + '></video>'
-      : '<img class="media" src="' + esc(u) + '" alt="">') +
+      ? '<video class="media" id="svm" autoplay playsinline ' + (it.posterUrl ? 'poster="' + esc(hiRes(it.posterUrl, 860)) + '"' : '') + '></video>'
+      : '<img class="media" src="' + esc(hiRes(u, 860)) + '" alt="">') +
     '<div class="zone l" id="svl"></div><div class="zone r" id="svr"></div></div>';
   el('svx').onclick = closeStories;
   el('svl').onclick = svPrev;
@@ -588,8 +623,9 @@ function svRender() {
   var bar = el('sv').querySelectorAll('.bars i b')[SV.i];
   if (vid) {
     var v = el('svm');
+    if (/\.m3u8/i.test(u)) playHls(v, u); else v.src = u;   // sharp playback in every browser
     v.onended = svNext;
-    v.onerror = function () { setTimeout(svNext, 800); };   // e.g. HLS in a non-Safari browser
+    v.onerror = function () { setTimeout(svNext, 2500); };   // show the poster a beat, then move on
     SV.timer = setInterval(function () {
       if (v.duration) bar.style.width = Math.min(100, (v.currentTime / v.duration) * 100) + '%';
     }, 100);
