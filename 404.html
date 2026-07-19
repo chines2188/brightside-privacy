@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bright Side ☀️</title>
+<!-- Static OG tags: call links shared in chats unfurl warm instead of dead. -->
+<meta property="og:site_name" content="Bright Side">
+<meta property="og:title" content="You're invited to a Bright Side call ☀️">
+<meta property="og:description" content="Join from your browser — video, voice, and live translated captions. No app needed.">
+<meta property="og:image" content="https://getbrightsideapp.com/icon.png">
+<style>
+*{margin:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(160deg,#2A1E3F 0%,#4A2C5E 40%,#C96F2E 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;color:#2B2433}
+.card{background:rgba(255,251,244,.97);border-radius:22px;max-width:430px;width:100%;padding:28px 24px;box-shadow:0 18px 60px rgba(0,0,0,.35);text-align:center}
+.sun{font-size:52px;margin-bottom:10px}
+h1{font-size:22px;font-weight:900;margin-bottom:8px}
+p{font-size:15px;line-height:1.5;color:#6b6076;margin-bottom:6px}
+.btn{display:block;text-align:center;font-weight:800;text-decoration:none;border-radius:999px;padding:14px;margin-top:14px;font-size:15.5px}
+.primary{background:linear-gradient(135deg,#FFD166,#F4A623,#E8890C);color:#231a06}
+.secondary{background:#231a06;color:#FFD166}
+.ghost{background:none;color:#8a5a10;border:2px solid #F4A623}
+.tiny{font-size:12.5px;color:#8a7f95;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="sun">☀️</div>
+  <h1 id="title">…</h1>
+  <p id="sub"></p>
+  <div id="actions"></div>
+  <div class="tiny" id="foot"></div>
+</div>
+<script>
+(function () {
+  // GitHub Pages serves this 404 for every unknown path — which makes it our
+  // smart router. /call/<token> and /join/<token> become a warm bilingual join
+  // page; anything else gets a friendly landing instead of a dead end.
+  var es = /^es/i.test(navigator.language || '');
+  var path = location.pathname || '';
+  var m = path.match(/^\/(call|join)\/([A-Za-z0-9._~-]{4,200})/);
+  var title = document.getElementById('title');
+  var sub = document.getElementById('sub');
+  var actions = document.getElementById('actions');
+  var foot = document.getElementById('foot');
+  var APP = 'https://apps.apple.com/app/id6774821890';
+  if (m) {
+    var token = encodeURIComponent(m[2]);
+    title.textContent = es ? 'Te invitaron a una llamada en Bright Side ☀️' : "You're invited to a Bright Side call ☀️";
+    sub.textContent = es
+      ? 'Únete aquí mismo desde tu navegador — video, voz y subtítulos traducidos en vivo. Sin descargar nada.'
+      : 'Join right here in your browser — video, voice, and live translated captions. No download needed.';
+    actions.innerHTML =
+      '<a class="btn primary" href="https://studio.brightsidestreams.com/chill.html?j=' + token + '">🎥 ' + (es ? 'Unirme en el navegador' : 'Join in your browser') + '</a>' +
+      '<a class="btn ghost" href="brightside://call/' + token + '">' + (es ? 'Ya tengo la app — abrirla 📱' : 'I have the app — open it 📱') + '</a>' +
+      '<a class="btn secondary" href="' + APP + '">' + (es ? 'Descargar la app — gratis ☀️' : 'Get the app — it’s free ☀️') + '</a>';
+    foot.textContent = es
+      ? 'Los enlaces de llamada duran unos minutos — si expiró, pide uno nuevo.'
+      : 'Call links stay fresh for a few minutes — if it expired, ask your friend to send a new one.';
+  } else {
+    title.textContent = es ? 'Esta página se tomó un día de descanso 🌅' : 'This page took a rest day 🌅';
+    sub.textContent = es ? 'Pero hay mucho sol de donde vino.' : "But there's plenty of sunshine where it came from.";
+    actions.innerHTML =
+      '<a class="btn primary" href="/app.html">' + (es ? 'Abrir Bright Side Web 🌐' : 'Open Bright Side Web 🌐') + '</a>' +
+      '<a class="btn ghost" href="/">' + (es ? 'Visitar Bright Side' : 'Visit Bright Side') + '</a>' +
+      '<a class="btn secondary" href="' + APP + '">' + (es ? 'Descargar la app ☀️' : 'Get the app ☀️') + '</a>';
+    foot.textContent = es ? 'Bright Side — la app donde tu gente sí aparece.' : 'Bright Side — the app where your people actually show up.';
+  }
+})();
+</script>
+</body>
+</html>
