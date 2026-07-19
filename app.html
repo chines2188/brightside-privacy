@@ -132,6 +132,12 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .wex .ws{color:var(--muted);font-weight:800;font-size:13px}
 .wex[data-add]{cursor:pointer}
 .wex .fx{border:0;background:none;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
+.chal{background:var(--card);border:1px solid var(--orange);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.chalt{font-size:14px;font-weight:800;color:var(--ink)}
+.chalbar{height:12px;border-radius:8px;background:color-mix(in srgb,var(--ink) 14%,transparent);overflow:hidden;margin:9px 0 7px}
+.chalbar i{display:block;height:100%;background:var(--orange);border-radius:8px;transition:width .6s ease}
+.chalsub{color:var(--muted);font-size:12.5px;font-weight:700}
+.chalme{color:var(--orange);font-size:13px;font-weight:800;margin-top:6px}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
 .tile .tv{font-weight:900;font-size:17px}
@@ -826,7 +832,8 @@ var FT = ES
       eaten:'Comido hoy', noeaten:'Aún no registras comida hoy — agrégala abajo ☀️',
       addfood:'Buscar comida', describe:'Descríbela (ej. 2 huevos y tostada)',
       foodlocal:'Se guarda en este navegador — aún no se sincroniza con el teléfono',
-      clearday:'Limpiar el día', nodata:'—', shareT:'Compartir mi puesto' }
+      clearday:'Limpiar el día', nodata:'—', shareT:'Compartir mi puesto',
+      challenge:'Reto de pasos de la comunidad', walking:'caminando juntos', youadded:'Sumaste', joinapp:'Únete en la app ☀️' }
   : { sub:['☀️ Today','🏆 Board','🏋️ Workout','📚 Exercises','🍎 Food'],
       board:{miles:'Miles',workouts:'Workouts',minutes:'Minutes',streak:'Streak',calories:'Calories',steps:'Steps'},
       units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
@@ -841,7 +848,8 @@ var FT = ES
       eaten:'Eaten today', noeaten:'No food logged yet today — add some below ☀️',
       addfood:'Search food', describe:'Describe it (e.g. 2 eggs and toast)',
       foodlocal:"Saved in this browser — doesn't sync to the phone yet",
-      clearday:'Clear the day', nodata:'—', shareT:'Share my rank' };
+      clearday:'Clear the day', nodata:'—', shareT:'Share my rank',
+      challenge:'Community Step Challenge', walking:'walking together', youadded:"You added", joinapp:'Join in the app ☀️' };
 var FIT = { sub:0, board:'miles', friends:false, goal:'strength', data:null };
 // GET helper for the WorkoutX-backed endpoints (they take query strings + a token header).
 function apiGet(path) {
@@ -864,11 +872,12 @@ function showFitness() {
 }
 // ☀️ Today — your week at a glance (your own rank/value per board + today's food).
 function fitToday() {
+  el('fitbody').innerHTML = '<div id="chalbox"></div><div id="todaybody"><div class="spin">' + T.loading + '</div></div>';
+  loadChallenge();
   if (!S.user) {
-    el('fitbody').innerHTML = '<div class="card center" style="padding:24px"><div class="sun">☀️</div><p class="muted" style="margin-top:8px">' + FT.signinsee + '</p><a class="btn" href="https://apps.apple.com/app/id6774821890">' + T.getapp + '</a></div>';
+    el('todaybody').innerHTML = '<div class="card center" style="padding:24px"><div class="sun">☀️</div><p class="muted" style="margin-top:8px">' + FT.signinsee + '</p><a class="btn" href="https://apps.apple.com/app/id6774821890">' + T.getapp + '</a></div>';
     return;
   }
-  el('fitbody').innerHTML = '<div class="spin">' + T.loading + '</div>';
   api('/api/competition/fitness', { username: S.user }).then(function (r) {
     var d = r || {};
     var defs = [['streak','🔥'],['steps','👟'],['calories','🍎'],['miles','🏃'],['workouts','💪'],['minutes','⏱']];
@@ -882,8 +891,22 @@ function fitToday() {
       return '<div class="tile"><div class="tv">' + b[1] + ' ' + val + '</div><div class="tl">' + FT.board[b[0]] + rk + '</div></div>';
     }).join('');
     tiles += '<div class="tile"><div class="tv">🍽 ' + eaten.toLocaleString() + ' cal</div><div class="tl">' + FT.eaten + '</div></div>';
-    el('fitbody').innerHTML = '<div class="section">' + FT.myweek + '</div><div class="tiles">' + tiles + '</div>';
-  }).catch(function () { el('fitbody').innerHTML = '<div class="card center muted">' + T.empty + '</div>'; });
+    el('todaybody').innerHTML = '<div class="section">' + FT.myweek + '</div><div class="tiles">' + tiles + '</div>';
+  }).catch(function () { el('todaybody').innerHTML = '<div class="card center muted">' + T.empty + '</div>'; });
+}
+// 👟 Collaborative community step challenge banner (works for guests too).
+function loadChallenge() {
+  api('/api/competition/steps', { username: S.user || '' }).then(function (r) {
+    if (!r || !el('chalbox')) return;
+    var total = r.total || 0, goal = r.goal || 500000, count = r.count || 0;
+    var pct = Math.max(2, Math.min(100, Math.round(total / goal * 100)));
+    var me = (r.friends || []).filter(function (x) { return x.isMe; })[0];
+    var meLine = me ? '<div class="chalme">' + FT.youadded + ' ' + (Number(me.score) || 0).toLocaleString() + ' 👟 ☀️</div>'
+      : (!S.user ? '<div class="chalme">' + FT.joinapp + '</div>' : '');
+    el('chalbox').innerHTML = '<div class="chal"><div class="chalt">👟 <b>' + FT.challenge + '</b> · ' + (ES ? 'esta semana' : 'this week') + '</div>' +
+      '<div class="chalbar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="chalsub">' + total.toLocaleString() + ' / ' + goal.toLocaleString() + ' ' + (ES ? 'pasos' : 'steps') + ' · ' + count + ' ' + FT.walking + '</div>' + meLine + '</div>';
+  }).catch(function () {});
 }
 // 🍎 Food — search (USDA) or describe-with-AI, logged to a browser-local day.
 function foodKey() { return 'bsw_food_' + new Date().toISOString().slice(0, 10); }
