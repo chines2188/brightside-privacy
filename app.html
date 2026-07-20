@@ -134,6 +134,11 @@ input,textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--l
 .wchk .wcbox{width:22px;height:22px;border-radius:7px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;color:#231a06;font-weight:900;font-size:13px;flex:none}
 .wchk.done .wcbox{background:var(--orange);border-color:var(--orange)}
 .wchk.done .wn{text-decoration:line-through;color:var(--muted)}
+.marow{display:flex;align-items:center;gap:11px;padding:6px 14px}
+.marow .mn{font-weight:800;font-size:14px;width:34%;text-transform:capitalize;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.marow .mbar{flex:1;height:10px;border-radius:6px;background:color-mix(in srgb,var(--ink) 12%,transparent);overflow:hidden}
+.marow .mbar i{display:block;height:100%;background:var(--orange);border-radius:6px;transition:width .5s ease}
+.marow .mp{font-weight:900;font-size:13px;width:42px;text-align:right}
 .wex[data-add]{cursor:pointer}
 .wex .fx{border:0;background:none;color:var(--muted);font-size:15px;cursor:pointer;padding:0 2px}
 .chal{background:var(--card);border:1px solid var(--orange);border-radius:16px;padding:14px 16px;margin-bottom:12px}
@@ -1064,12 +1069,35 @@ function fitWorkout() {
       if (!ex.length) { el('wout').innerHTML = '<div class="card center muted">' + FT.wfail + '</div>'; return; }
       var stored = { goal: FIT.goal, ts: Date.now(), mins: w.estimatedDurationMinutes || 0,
         exercises: ex.map(function (e) {
-          return { name: (e.exercise && e.exercise.name) || e.name || e.title || '', sets: e.sets || 0,
-            reps: (e.reps != null ? e.reps : ''), rest: e.restSeconds || 0, done: false };
+          var xo = e.exercise || {};
+          return { name: xo.name || e.name || e.title || '', sets: e.sets || 0,
+            reps: (e.reps != null ? e.reps : ''), rest: e.restSeconds || 0,
+            target: xo.target || e.target || '', body: xo.bodyPart || e.bodyPart || '',
+            secondary: xo.secondaryMuscles || e.secondaryMuscles || [], done: false };
         }) };
       saveWorkout(stored); renderSavedWorkout(stored);
     });
   };
+}
+// 💪 Body Activity (Peloton-style) — tally which muscles the workout hits from each
+// exercise's target + secondary muscles, ranked with %. Primary counts double.
+function bodyActivity(w) {
+  var tally = {}, total = 0;
+  w.exercises.forEach(function (e) {
+    var prim = String(e.target || e.body || '').trim();
+    if (prim) { tally[prim] = (tally[prim] || 0) + 2; total += 2; }
+    (e.secondary || []).forEach(function (m) { m = String(m || '').trim(); if (m) { tally[m] = (tally[m] || 0) + 1; total += 1; } });
+  });
+  if (!total) return '';
+  var arr = Object.keys(tally).map(function (k) { return [k, tally[k]]; }).sort(function (a, b) { return b[1] - a[1]; });
+  var top = arr.slice(0, 6), shown = 0;
+  var rows = top.map(function (kv) {
+    var pct = Math.round(kv[1] / total * 100); shown += pct;
+    return '<div class="marow"><span class="mn">' + esc(kv[0]) + '</span><div class="mbar"><i style="width:' + Math.max(4, pct) + '%"></i></div><span class="mp">' + pct + '%</span></div>';
+  }).join('');
+  var other = Math.max(0, 100 - shown);
+  var otherRow = (arr.length > 6 && other > 0) ? '<div class="marow"><span class="mn" style="color:var(--muted)">' + (ES ? 'Otros músculos' : 'Other muscles') + '</span><div class="mbar"></div><span class="mp">' + other + '%</span></div>' : '';
+  return '<div class="card" style="margin-top:10px"><div class="section" style="margin:2px 0 9px">💪 ' + (ES ? 'Actividad muscular' : 'Body Activity') + '</div>' + rows + otherRow + '</div>';
 }
 function renderSavedWorkout(w) {
   var doneN = w.exercises.filter(function (e) { return e.done; }).length;
@@ -1088,6 +1116,7 @@ function renderSavedWorkout(w) {
     '<div class="muted" style="font-size:13px;margin-top:3px">' + doneN + '/' + w.exercises.length + ' ' + (ES ? 'hechos' : 'done') + (w.mins ? ' · ~' + w.mins + ' min' : '') + '</div>' +
     '<div class="chalbar" style="margin-top:9px"><i style="width:' + pct + '%"></i></div></div>' +
     '<div class="card" style="padding:4px 0;margin-top:10px">' + rows + '</div>' +
+    bodyActivity(w) +
     '<button class="btn dark" id="wnew" style="margin-top:8px">' + (ES ? 'Nuevo entreno' : 'New workout') + '</button>';
   document.querySelectorAll('#fitbody [data-wi]').forEach(function (b) {
     b.onclick = function () { var s = getSavedWorkout(); var i = +b.getAttribute('data-wi'); s.exercises[i].done = !s.exercises[i].done; saveWorkout(s); renderSavedWorkout(s); };
