@@ -828,8 +828,8 @@ function pvRender() {
 // syncs 1:1 with the phone. Workout + library proxy the app's WorkoutX API.
 var FT = ES
   ? { sub:['☀️ Hoy','🏆 Tabla','🏋️ Entreno','📚 Ejercicios','🍎 Comida'],
-      board:{miles:'Millas',workouts:'Entrenos',minutes:'Minutos',streak:'Racha',calories:'Calorías',steps:'Pasos'},
-      units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
+      board:{miles:'Millas',bike:'Ciclismo',workouts:'Entrenos',minutes:'Minutos',streak:'Racha',calories:'Calorías',steps:'Pasos'},
+      units:{miles:'mi',bike:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
       you:'tú', global:'Global', friendsW:'Amigos',
       norows:'Aún no hay nadie aquí — ¡sé el primero esta semana! ☀️',
       wintro:'Elige tu meta y genera el entreno de hoy 💪', generate:'Generar entreno',
@@ -844,8 +844,8 @@ var FT = ES
       clearday:'Limpiar el día', nodata:'—', shareT:'Compartir mi puesto',
       challenge:'Reto de pasos de la comunidad', walking:'caminando juntos', youadded:'Sumaste', joinapp:'Únete en la app ☀️' }
   : { sub:['☀️ Today','🏆 Board','🏋️ Workout','📚 Exercises','🍎 Food'],
-      board:{miles:'Miles',workouts:'Workouts',minutes:'Minutes',streak:'Streak',calories:'Calories',steps:'Steps'},
-      units:{miles:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
+      board:{miles:'Miles',bike:'Cycling',workouts:'Workouts',minutes:'Minutes',streak:'Streak',calories:'Calories',steps:'Steps'},
+      units:{miles:'mi',bike:'mi',workouts:'',minutes:'min',streak:'d',calories:'cal',steps:''},
       you:'you', global:'Global', friendsW:'Friends',
       norows:'Nobody here yet — be the first this week! ☀️',
       wintro:"Pick your goal and generate today's workout 💪", generate:'Generate workout',
@@ -979,7 +979,7 @@ function fitBoard() {
   }).catch(function () { el('fitbody').innerHTML = '<div class="card center muted">' + T.empty + '</div>'; });
 }
 function drawBoard() {
-  var boards = [['miles','🏃'],['workouts','💪'],['minutes','⏱'],['streak','🔥'],['calories','🍎'],['steps','👟']];
+  var boards = [['miles','🏃'],['bike','🚴'],['workouts','💪'],['minutes','⏱'],['streak','🔥'],['calories','🍎'],['steps','👟']];
   var cur = FIT.board, d = FIT.data || {}, unit = FT.units[cur] || '';
   var useFriends = FIT.friends && !!S.user;
   var blk = d[cur] || { top:[], friends:[] };
