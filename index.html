@@ -140,6 +140,20 @@
     transition: transform 0.2s;
   }
   .sc-dl:hover { transform: translateY(-1px); }
+  /* Two buttons where there was one: keep them on one line on desktop, let them
+     wrap on a narrow phone rather than squashing the brand mark. */
+  .sc-dls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .sc-dl-alt { background: var(--dark); color: #fff; }
+  @media (max-width: 560px) {
+    /* Two pills have to share one line in a STICKY bar — if they wrap, the bar
+       doubles in height and eats the top of every screen for the whole scroll.
+       So on a phone: drop the wordmark and the "— Free" tail, keep both stores. */
+    .sc-dl { padding: 9px 13px; font-size: 12.5px; }
+    .sc-brand span { display: none; }
+    .sc-free { display: none; }
+    .sticky-cta { padding: 8px 12px; gap: 8px; }
+    .sc-dls { flex-wrap: nowrap; }
+  }
 
   /* ── STATS BAR ── */
   .stats {
@@ -325,9 +339,18 @@
 <!-- Sticky download bar -->
 <div class="sticky-cta">
   <div class="sc-brand"><img src="icon.png" alt="Bright Side"><span>Bright Side</span></div>
-  <a class="sc-dl" href="https://apps.apple.com/us/app/bright-side-good-news-daily/id6774821890">
-    <span data-en>⬇ Download — Free</span><span data-es>⬇ Descargar — Gratis</span>
-  </a>
+  <!-- 📱 Both stores here too. The hero below has offered iPhone AND Android for
+       a while, but this sticky bar — the one that follows you down the whole page,
+       so the one most people actually click — offered only the App Store. An
+       Android visitor was sent somewhere they cannot install from. -->
+  <div class="sc-dls">
+    <a class="sc-dl" href="https://apps.apple.com/us/app/bright-side-good-news-daily/id6774821890">
+      <span data-en>⬇ iPhone<span class="sc-free"> — Free</span></span><span data-es>⬇ iPhone<span class="sc-free"> — Gratis</span></span>
+    </a>
+    <a class="sc-dl sc-dl-alt" href="https://play.google.com/store/apps/details?id=com.chines.brightside&amp;pcampaignid=web_share">
+      <span data-en>▶ Android<span class="sc-free"> — Free</span></span><span data-es>▶ Android<span class="sc-free"> — Gratis</span></span>
+    </a>
+  </div>
 </div>
 
 <!-- Language Bar -->
