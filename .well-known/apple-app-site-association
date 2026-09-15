@@ -4,7 +4,12 @@
     "details": [
       {
         "appID": "XC9V6FBFCJ.com.chines.brightside",
-        "paths": [ "/call/*", "/join/*", "/e/*" ]
+        "paths": [
+          "/call/*",
+          "/join/*",
+          "/e/*",
+          "/challenge/*"
+        ]
       }
     ]
   }
