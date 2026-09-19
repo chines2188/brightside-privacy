@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.chines.brightside",
+      "sha256_cert_fingerprints": [
+        "AE:BA:99:AC:AD:F7:16:C0:6B:5E:95:D8:B9:4E:C2:CE:28:6B:5B:A4:04:74:42:01:62:6A:A9:53:71:0C:00:61",
+        "B7:40:D4:FB:C4:83:E6:92:80:0F:8D:50:9B:F3:F7:D9:60:AF:F0:13:46:4A:A8:32:E7:B1:B4:10:D9:CD:99:82"
+      ]
+    }
+  }
+]
