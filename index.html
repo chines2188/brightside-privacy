@@ -2,660 +2,720 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bright Miles: fitness, friends and good news</title>
 <meta name="description" content="Track your runs, steps and workouts, ask Miles, your AI coach, chat and call your friends, and read good news free every day. In English and Spanish, on iPhone, Android and your watch.">
 <link rel="canonical" href="https://getbrightsideapp.com/">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
+<meta name="theme-color" content="#14110d">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Bright Miles">
 <meta property="og:url" content="https://getbrightsideapp.com/">
 <meta property="og:title" content="Bright Miles: fitness, friends and good news">
 <meta property="og:description" content="Runs, steps and workouts, Miles the AI coach, chats and calls with your friends, and good news free every day. English and Spanish.">
-<meta property="og:image" content="https://getbrightsideapp.com/icon.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-1440.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Bright Miles: fitness, friends and good news">
-<meta name="twitter:image" content="https://getbrightsideapp.com/icon.png">
+<meta name="twitter:image" content="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-1440.jpg">
 <meta name="apple-itunes-app" content="app-id=6774821890">
+<link rel="preconnect" href="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<!-- Site v2, 6 Oct 2026. Every heavy file (pictures, loops, the step film) lives in R2 under ui/site/v2/ or ui/loop/.
+     Every claim on this page is checked against backend/static/app-privacy.html and the app (see _work/site-v2/plan.md).
+     No ad-free promise, no ratings, no download counts, no vendor or model names. -->
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --orange: #F0A51E;
-    --dark:   #1A1A2E;
-    --cream:  #F8F5EE;
-    --white:  #FFFFFF;
-    --gray:   #6B7280;
-    --green:  #28B464;
+    --gold: #F4A623;
+    --gold-soft: #F7C873;
+    --gold-deep: #B9791A;
+    --espresso: #2A2118;
+    --night: #14110D;
+    --night-2: #1B1712;
+    --cream: #FFF6E6;
+    --linen: #FCEBCF;
+    --sand: #F4ECDD;
+    --ink: #1B1712;
+    --muted: #6E6253;
+    --line: rgba(42, 33, 24, 0.12);
+    --line-dark: rgba(255, 246, 230, 0.12);
+    --serif: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --wrap: 1180px;
+    --gutter: clamp(16px, 4vw, 40px);
   }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  img, video { display: block; max-width: 100%; }
+  a { color: inherit; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--cream);
-    color: var(--dark);
-    line-height: 1.6;
-  }
+  /* bilingual: one toggle, both languages in the markup */
+  body.es [data-en] { display: none !important; }
+  body.en [data-es] { display: none !important; }
 
-  /* ── LANGUAGE TOGGLE ── */
-  .lang-bar {
-    background: var(--dark);
-    text-align: right;
-    padding: 10px 24px;
-  }
-  .lang-btn {
-    background: none;
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    padding: 4px 14px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 13px;
-    margin-left: 8px;
-    transition: all 0.2s;
-  }
-  .lang-btn.active { background: var(--orange); border-color: var(--orange); }
+  /* type */
+  .eyebrow { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 600; color: var(--gold-deep); }
+  .dark .eyebrow, .eyebrow.on-dark { color: var(--gold-soft); }
+  h1, h2, .serif { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; line-height: 1.02; }
+  h1 em, h2 em { font-style: italic; color: var(--gold); }
+  .light h2 em { color: var(--gold-deep); }
+  h2 { font-size: clamp(40px, 6vw, 76px); }
+  .lede { font-size: clamp(17px, 1.6vw, 20px); color: var(--muted); max-width: 560px; }
+  .dark .lede { color: rgba(255, 246, 230, 0.72); }
+  section { position: relative; }
+  .pad { padding: clamp(80px, 11vw, 150px) 0; }
+  .dark { background: var(--night); color: var(--cream); }
+  .light { background: var(--cream); }
+  .head { display: grid; gap: 18px; margin-bottom: clamp(40px, 6vw, 72px); }
+  .head.center { text-align: center; justify-items: center; }
 
-  /* ── HERO ── */
-  .hero {
-    background: linear-gradient(160deg, #ff6b6b 0%, #ff8e53 40%, #f0a51e 100%);
-    color: white;
-    text-align: center;
-    padding: 80px 24px 100px;
-    position: relative;
-    overflow: hidden;
+  /* store buttons, drawn in CSS with the store marks */
+  .stores { display: flex; flex-wrap: wrap; gap: 12px; }
+  .store { display: inline-flex; align-items: center; gap: 12px; min-width: 196px; padding: 11px 22px 11px 18px; border-radius: 14px; text-decoration: none;
+           background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.22); transition: transform .2s ease, background .2s ease; }
+  .store:hover { transform: translateY(-2px); background: #111; }
+  .store svg { width: 26px; height: 26px; flex: none; }
+  .store small { display: block; font-size: 11px; line-height: 1.1; opacity: .8; letter-spacing: .02em; }
+  .store b { display: block; font-size: 19px; line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
+  .getline { margin-top: 18px; font-size: 14px; color: rgba(255,246,230,0.75); }
+  .getline a { color: var(--gold-soft); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(247,200,115,0.4); }
+
+  /* nav */
+  .nav { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background .3s ease, border-color .3s ease; border-bottom: 1px solid transparent; }
+  .nav.solid { background: rgba(20, 17, 13, 0.8); -webkit-backdrop-filter: saturate(140%) blur(18px); backdrop-filter: saturate(140%) blur(18px); border-color: var(--line-dark); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--cream); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
+  .brand img { width: 30px; height: 30px; border-radius: 8px; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .lang { display: inline-flex; padding: 3px; border-radius: 999px; background: rgba(255,246,230,0.1); border: 1px solid rgba(255,246,230,0.18); }
+  .lang button { font: inherit; font-size: 12.5px; font-weight: 600; color: rgba(255,246,230,0.8); background: none; border: 0; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+  .lang button.active { background: var(--cream); color: var(--night); }
+  .nav-cta { text-decoration: none; background: var(--gold); color: var(--night); font-weight: 700; font-size: 14px; padding: 9px 18px; border-radius: 999px; white-space: nowrap; }
+  .nav-cta:hover { background: var(--gold-soft); }
+
+  /* hero */
+  .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; background: var(--night); color: var(--cream); }
+  .hero-media { position: absolute; inset: 0; }
+  .hero-media picture, .hero-media img, .hero-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero-media img.still { animation: drift 28s ease-in-out infinite alternate; transform-origin: 62% 45%; }
+  .hero-media video { opacity: 0; transition: opacity 1.2s ease; }
+  .hero-media video.on { opacity: 1; }
+  @keyframes drift { from { transform: scale(1.02); } to { transform: scale(1.09); } }
+  .hero::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(20,17,13,0.55) 0%, rgba(20,17,13,0) 14%),
+                linear-gradient(90deg, rgba(20,17,13,0.92) 0%, rgba(20,17,13,0.7) 34%, rgba(20,17,13,0.12) 64%, rgba(20,17,13,0.05) 100%),
+                linear-gradient(0deg, rgba(20,17,13,0.85) 0%, rgba(20,17,13,0) 28%); }
+  .hero .wrap { position: relative; z-index: 2; width: 100%; display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 40px; padding-top: 104px; padding-bottom: 80px; }
+  .hero h1 { font-size: clamp(54px, 8vw, 112px); margin: 18px 0 22px; }
+  .hero .lede { color: rgba(255,246,230,0.82); margin-bottom: 34px; }
+  .hero-note { margin-top: 16px; font-size: 13.5px; color: rgba(255,246,230,0.66); }
+  .hero-device { position: relative; justify-self: center; width: min(290px, 24vw); }
+  .hero-device .phone { transform: rotate(-4deg); }
+  .hero-device .watch { position: absolute; left: -38%; bottom: 6%; width: 50%; transform: rotate(5deg); }
+  .scroll-cue { position: absolute; left: 50%; bottom: 22px; z-index: 2; transform: translateX(-50%); width: 22px; height: 36px; border: 1.5px solid rgba(255,246,230,0.4); border-radius: 12px; }
+  .scroll-cue::after { content: ''; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: var(--gold-soft); animation: cue 1.8s ease-in-out infinite; }
+  @keyframes cue { 0% { opacity: 0; transform: translateY(0); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(12px); } }
+
+  /* device frames drawn in CSS */
+  .phone { position: relative; aspect-ratio: 1290 / 2796; border-radius: 15% / 7%; padding: 3.2%; background: linear-gradient(145deg, #3a332b, #0d0b09 40%, #2b251f); box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 40px 80px -20px rgba(0,0,0,0.55), 0 18px 30px -12px rgba(0,0,0,0.4); }
+  .phone .screen { position: relative; width: 100%; height: 100%; border-radius: 12.5% / 5.8%; overflow: hidden; background: #000; }
+  .phone .screen img { width: 100%; height: 100%; object-fit: cover; }
+  .phone .screen::before { content: ''; position: absolute; z-index: 2; top: 1.4%; left: 50%; width: 30%; height: 3.2%; transform: translateX(-50%); background: #000; border-radius: 999px; }
+  .watch { position: relative; aspect-ratio: 416 / 500; border-radius: 30%; padding: 7%; background: linear-gradient(150deg, #47403a, #121010 45%, #3a332c); box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 30px 60px -20px rgba(0,0,0,0.6); }
+  .watch .screen { width: 100%; height: 100%; border-radius: 24%; overflow: hidden; background: #000; }
+  .watch .screen img { width: 100%; height: 100%; object-fit: cover; }
+  .watch::after { content: ''; position: absolute; right: -3.5%; top: 26%; width: 4.5%; height: 15%; border-radius: 3px; background: linear-gradient(90deg, #5a524a, #2a2520); }
+  .round { position: relative; aspect-ratio: 1; border-radius: 50%; padding: 6%; background: radial-gradient(circle at 30% 25%, #4a433c, #121010 55%, #302a24); box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 30px 60px -20px rgba(0,0,0,0.6); }
+  .round .screen { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background: #000; }
+  .round .screen img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* reveal on scroll (off when reduced motion is asked for) */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* facts ribbon */
+  .facts { background: var(--night-2); color: var(--cream); border-top: 1px solid var(--line-dark); }
+  .facts .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .fact { padding: 34px 20px; text-align: center; border-left: 1px solid var(--line-dark); }
+  .fact:first-child { border-left: 0; }
+  .fact .serif { font-size: clamp(34px, 4vw, 48px); color: var(--gold-soft); }
+  .fact p { font-size: 13.5px; color: rgba(255,246,230,0.66); margin-top: 6px; }
+
+  /* train: three real app screens */
+  .train { background: radial-gradient(1200px 600px at 80% 0%, var(--linen), transparent 60%), var(--cream); }
+  .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 44px); align-items: start; }
+  .trio figure { display: grid; gap: 22px; }
+  .trio figure:nth-child(2) { margin-top: 56px; }
+  .trio .phone { max-width: 300px; width: 100%; justify-self: center; }
+  .trio figcaption h3 { font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.1; }
+  .trio figcaption p { color: var(--muted); font-size: 15.5px; margin-top: 6px; max-width: 34ch; }
+  .trio figcaption { text-align: center; justify-self: center; }
+  .trio figcaption p { margin-left: auto; margin-right: auto; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: clamp(40px, 6vw, 64px); }
+  .chips span { font-size: 13.5px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,0.55); color: var(--espresso); }
+
+  /* moves: a looping wall of real clips from our move library */
+  .moves { background: radial-gradient(900px 500px at 50% 0%, rgba(244,166,35,0.16), transparent 70%), var(--night); }
+  .wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(6px, 1.2vw, 14px); max-width: 780px; margin: 0 auto; }
+  .tile { position: relative; aspect-ratio: 4 / 5; background-position: center 62% !important; border-radius: 18px; overflow: hidden; background: #0c0a08 center / cover no-repeat; box-shadow: 0 0 0 1px rgba(255,246,230,0.08) inset; }
+  .tile video { width: 100%; height: 100%; object-fit: cover; object-position: center 62%; opacity: 0; transition: opacity .6s ease; }
+  .tile video.on { opacity: 1; }
+  .tile span { position: absolute; left: 12px; bottom: 12px; right: 12px; font-size: 13px; font-weight: 600; color: var(--cream); text-shadow: 0 1px 8px rgba(0,0,0,0.7); }
+  .tile::after { content: ''; position: absolute; inset: auto 0 0 0; height: 40%; background: linear-gradient(0deg, rgba(0,0,0,0.6), transparent); pointer-events: none; }
+  .tile span { z-index: 1; }
+  .fine { font-size: 12.5px; color: rgba(255,246,230,0.5); text-align: center; margin-top: 22px; }
+
+  /* miles: gold Miles on black marble */
+  .miles { background: var(--night) url('https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/marble-2000.webp') center bottom / cover no-repeat; overflow: hidden; }
+  .miles::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, var(--night) 0%, rgba(20,17,13,0.35) 30%, rgba(20,17,13,0.55) 100%); }
+  .miles .wrap { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 90px); align-items: center; }
+  .miles-art { position: relative; justify-self: center; width: min(460px, 100%); }
+  .disc { aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: var(--sand); box-shadow: 0 0 0 10px rgba(244,166,35,0.12), 0 0 120px 20px rgba(244,166,35,0.25); }
+  .disc img { width: 100%; height: 100%; object-fit: cover; transform: scale(0.94) translateY(2%); }
+  .miles-art .watch { position: absolute; right: -6%; bottom: -8%; width: 40%; transform: rotate(-6deg); }
+  .points { list-style: none; display: grid; gap: 16px; margin: 30px 0 0; }
+  .points li { display: grid; grid-template-columns: 26px 1fr; gap: 12px; color: rgba(255,246,230,0.82); font-size: 16.5px; }
+  .points li::before { content: ''; width: 10px; height: 10px; margin: 8px 0 0 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 5px rgba(244,166,35,0.18); }
+  .plan { margin-top: 30px; padding: 18px 20px; border-radius: 16px; border: 1px solid rgba(247,200,115,0.3); background: rgba(20,17,13,0.55); color: rgba(255,246,230,0.8); font-size: 15px; }
+  .plan b { color: var(--gold-soft); font-weight: 600; }
+
+  /* wrist */
+  .wrist { background: linear-gradient(180deg, var(--cream), var(--linen)); overflow: hidden; }
+  .wrist .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 80px); align-items: center; }
+  .watches { position: relative; display: flex; justify-content: center; align-items: center; gap: clamp(18px, 3vw, 40px); }
+  .watches figure { flex: 0 0 auto; width: min(240px, 44%); }
+  .watches figure:nth-child(2) { width: min(230px, 42%); margin-top: 90px; }
+  .watches .watch, .watches .round { width: 100%; }
+  .watches figcaption { text-align: center; font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+  /* people: chats, calls, the evening recap, good news, the studio */
+  .people { background: var(--cream); }
+  .cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: clamp(14px, 2vw, 22px); }
+  .card { grid-column: span 2; display: flex; flex-direction: column; border-radius: 22px; overflow: hidden; background: #fff; border: 1px solid var(--line); box-shadow: 0 1px 0 rgba(42,33,24,0.03), 0 24px 50px -30px rgba(42,33,24,0.35); }
+  .card.wide { grid-column: span 3; }
+  .card .pic { aspect-ratio: 16 / 9; background: var(--linen) center / cover no-repeat; }
+  .card.tall .pic { aspect-ratio: 16 / 10; }
+  .card .body { padding: 22px 24px 26px; }
+  .card h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.1; }
+  .card p { color: var(--muted); font-size: 15px; margin-top: 8px; }
+  .card.ink { background: var(--night-2); border-color: transparent; color: var(--cream); }
+  .card.ink p { color: rgba(255,246,230,0.68); }
+
+  /* wins: the September step champion film */
+  .wins { background: radial-gradient(800px 500px at 25% 50%, rgba(244,166,35,0.14), transparent 70%), var(--night-2); }
+  .wins .wrap { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(32px, 6vw, 90px); align-items: center; }
+  .film { position: relative; justify-self: center; width: min(340px, 100%); aspect-ratio: 9 / 16; border-radius: 26px; overflow: hidden; background: #000 center / cover no-repeat; box-shadow: 0 0 0 1px rgba(247,200,115,0.25), 0 40px 90px -30px rgba(0,0,0,0.8); }
+  .film video { width: 100%; height: 100%; object-fit: cover; }
+  .film button { position: absolute; inset: 0; display: grid; place-items: center; width: 100%; border: 0; cursor: pointer; background: linear-gradient(0deg, rgba(0,0,0,0.35), rgba(0,0,0,0) 50%); }
+  .film button i { width: 74px; height: 74px; border-radius: 50%; background: rgba(255,246,230,0.92); display: grid; place-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+  .film button i::after { content: ''; margin-left: 5px; border-style: solid; border-width: 13px 0 13px 21px; border-color: transparent transparent transparent var(--night); }
+  .film button em { position: absolute; bottom: 18px; font-style: normal; font-size: 13px; font-weight: 600; color: var(--cream); letter-spacing: .02em; }
+  .stat-row { display: flex; flex-wrap: wrap; gap: 28px 44px; margin-top: 30px; }
+  .stat-row div .serif { font-size: clamp(40px, 5vw, 60px); color: var(--gold-soft); line-height: 1; }
+  .stat-row div p { font-size: 13.5px; color: rgba(255,246,230,0.62); margin-top: 6px; }
+
+  /* privacy */
+  .privacy { background: var(--linen); padding: clamp(64px, 8vw, 100px) 0; }
+  .privacy .wrap { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(28px, 5vw, 70px); align-items: center; }
+  .privacy h2 { font-size: clamp(36px, 4.6vw, 58px); }
+  .promises { display: grid; gap: 12px; }
+  .promises p { padding: 16px 20px; border-radius: 14px; background: rgba(255,255,255,0.7); border: 1px solid var(--line); font-size: 15.5px; }
+  .privacy a.more { color: var(--gold-deep); font-weight: 600; }
+
+  /* final call to action, on the marble */
+  .final { background: var(--night) url('https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/marble-2000.webp') center / cover no-repeat; text-align: center; overflow: hidden; }
+  .final::before { content: ''; position: absolute; inset: 0; background: radial-gradient(700px 400px at 50% 40%, rgba(20,17,13,0.25), rgba(20,17,13,0.82)); }
+  .final .wrap { position: relative; display: grid; justify-items: center; gap: 20px; }
+  .final h2 { font-size: clamp(46px, 7vw, 96px); }
+  .final .stores { justify-content: center; margin-top: 10px; }
+  .signup { margin-top: 38px; width: min(520px, 100%); padding: 24px; border-radius: 20px; background: rgba(20,17,13,0.6); border: 1px solid var(--line-dark); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .signup p { font-size: 15px; color: rgba(255,246,230,0.75); margin-bottom: 14px; }
+  .signup form { display: flex; gap: 10px; }
+  .signup input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 13px 18px; border-radius: 999px; border: 1px solid rgba(255,246,230,0.25); background: rgba(255,246,230,0.08); color: var(--cream); outline: none; }
+  .signup input::placeholder { color: rgba(255,246,230,0.45); }
+  .signup input:focus { border-color: var(--gold-soft); }
+  .signup button { font: inherit; font-weight: 700; font-size: 15px; padding: 13px 22px; border-radius: 999px; border: 0; background: var(--gold); color: var(--night); cursor: pointer; white-space: nowrap; }
+  .signup .ok { display: none; color: var(--gold-soft); font-weight: 600; margin: 0; }
+  .signup small { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,246,230,0.45); }
+
+  footer { background: #0d0b09; color: rgba(255,246,230,0.5); padding: 44px 0 52px; font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 18px 30px; align-items: center; justify-content: space-between; }
+  footer .brand { font-size: 15px; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  footer a { text-decoration: none; color: rgba(255,246,230,0.75); }
+  footer a:hover { color: var(--gold-soft); }
+  footer .copy { width: 100%; font-size: 12.5px; color: rgba(255,246,230,0.4); }
+
+  @media (max-width: 900px) {
+    .facts .wrap { grid-template-columns: repeat(2, 1fr); }
+    .fact:nth-child(3) { border-left: 0; }
+    .fact:nth-child(n+3) { border-top: 1px solid var(--line-dark); }
+    .trio { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 74%; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 var(--gutter) 10px; margin: 0 calc(var(--gutter) * -1); scrollbar-width: none; }
+    .trio::-webkit-scrollbar { display: none; }
+    .trio figure { scroll-snap-align: center; }
+    .trio figure:nth-child(2) { margin-top: 0; }
+    .miles .wrap, .wrist .wrap, .wins .wrap, .privacy .wrap { grid-template-columns: 1fr; }
+    .miles-art { width: min(360px, 86%); margin-bottom: 30px; }
+    .wins .film { order: 2; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .card, .card.wide { grid-column: span 2; }
+    .card:not(.wide) { grid-column: span 1; }
   }
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.15) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .app-icon {
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(135deg, var(--orange), #e8931a);
-    border-radius: 27px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 60px;
-    margin: 0 auto 28px;
-    box-shadow: 0 20px 60px rgba(240,165,30,0.4);
-  }
-  .hero h1 {
-    font-size: clamp(36px, 6vw, 64px);
-    font-weight: 900;
-    color: white;
-    margin-bottom: 8px;
-    letter-spacing: -1px;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.15);
-  }
-  .hero-tagline {
-    font-size: clamp(12px, 2vw, 14px);
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  .hero-sub {
-    font-size: clamp(18px, 3vw, 24px);
-    color: rgba(255,255,255,0.85);
-    max-width: 580px;
-    margin: 0 auto 48px;
-    line-height: 1.5;
-  }
-  .btn-primary {
-    display: inline-block;
-    background: var(--orange);
-    color: var(--dark);
-    font-weight: 800;
-    font-size: 21px;
-    padding: 20px 60px;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 8px 30px rgba(240,165,30,0.4);
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(240,165,30,0.5); }
-  .btn-store-img { height: 54px; }
-  .hero-note {
-    margin-top: 20px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.4);
-  }
-  .android-soon {
-    margin-top: 14px;
-    font-size: 14px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.65);
-  }
-  /* Sticky download bar */
-  .sticky-cta {
-    position: sticky; top: 0; z-index: 999;
-    background: #fff; border-bottom: 1px solid #ececec;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 20px; gap: 12px;
-    box-shadow: 0 2px 14px rgba(0,0,0,0.06);
-  }
-  .sc-brand { display: flex; align-items: center; gap: 9px; font-weight: 800; color: var(--dark); font-size: 16px; }
-  .sc-brand img { width: 30px; height: 30px; border-radius: 7px; }
-  .sc-dl {
-    background: var(--orange); color: var(--dark); font-weight: 800; font-size: 14px;
-    padding: 11px 24px; border-radius: 50px; text-decoration: none; white-space: nowrap;
-    transition: transform 0.2s;
-  }
-  .sc-dl:hover { transform: translateY(-1px); }
-  /* Two buttons where there was one: keep them on one line on desktop, let them
-     wrap on a narrow phone rather than squashing the brand mark. */
-  .sc-dls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-  .sc-dl-alt { background: var(--dark); color: #fff; }
   @media (max-width: 560px) {
-    /* Two pills have to share one line in a STICKY bar — if they wrap, the bar
-       doubles in height and eats the top of every screen for the whole scroll.
-       So on a phone: drop the wordmark and the "— Free" tail, keep both stores. */
-    .sc-dl { padding: 9px 13px; font-size: 12.5px; }
-    .sc-brand span { display: none; }
-    .sc-free { display: none; }
-    .sticky-cta { padding: 8px 12px; gap: 8px; }
-    .sc-dls { flex-wrap: nowrap; }
+    .fact { padding: 24px 10px; }
+    .wall { gap: 6px; }
+    .tile { border-radius: 12px; }
+    .tile span { left: 8px; bottom: 8px; font-size: 11px; }
+    .card:not(.wide) { grid-column: span 2; }
+    .watches figure:nth-child(2) { margin-top: 56px; }
+    .signup form { flex-direction: column; }
+    footer .wrap { flex-direction: column; align-items: flex-start; }
   }
 
-  /* ── STATS BAR ── */
-  .stats {
-    background: var(--orange);
-    padding: 28px 24px;
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    flex-wrap: wrap;
-  }
-  .stat { text-align: center; }
-  .stat-num { font-size: 32px; font-weight: 900; color: var(--dark); }
-  .stat-label { font-size: 13px; color: var(--dark); opacity: 0.7; font-weight: 600; }
 
-  /* ── SECTIONS ── */
-  .section { padding: 80px 24px; max-width: 1000px; margin: 0 auto; }
-  .section-title {
-    font-size: clamp(28px, 4vw, 42px);
-    font-weight: 900;
-    text-align: center;
-    margin-bottom: 16px;
-    letter-spacing: -0.5px;
+  @media (max-width: 900px) {
+    .hero .wrap { grid-template-columns: 1fr; padding-top: 120px; padding-bottom: 56px; }
+    .hero-device { display: none; }
+    .hero::after { background: linear-gradient(180deg, rgba(20,17,13,0.6) 0%, rgba(20,17,13,0) 16%), linear-gradient(0deg, rgba(20,17,13,0.96) 0%, rgba(20,17,13,0.6) 50%, rgba(20,17,13,0.2) 100%); }
+    .hero { align-items: flex-end; }
   }
-  .section-sub {
-    text-align: center;
-    color: var(--gray);
-    font-size: 18px;
-    max-width: 600px;
-    margin: 0 auto 56px;
-  }
-
-  /* ── WHY CARDS ── */
-  .why-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
-  }
-  .why-card {
-    background: var(--white);
-    border-radius: 24px;
-    padding: 32px 28px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    transition: transform 0.2s;
-  }
-  .why-card:hover { transform: translateY(-4px); }
-  .why-emoji { font-size: 40px; margin-bottom: 16px; }
-  .why-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
-  .why-card p { font-size: 15px; color: var(--gray); line-height: 1.6; }
-
-  /* ── SCREENSHOTS ── */
-  .screenshots-section { background: var(--dark); padding: 80px 24px; }
-  .screenshots-inner { max-width: 1000px; margin: 0 auto; }
-  .screenshots-section .section-title { color: white; }
-  .screenshots-section .section-sub { color: rgba(255,255,255,0.5); }
-  .screenshots-grid {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    padding-bottom: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .screenshot-frame {
-    background: var(--white);
-    border-radius: 32px;
-    width: 200px;
-    height: 360px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    position: relative;
-  }
-  .screenshot-inner {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: var(--cream);
-  }
-  .mock-emoji { font-size: 48px; margin-bottom: 12px; }
-  .mock-title { font-size: 14px; font-weight: 800; text-align: center; color: var(--dark); margin-bottom: 8px; }
-  .mock-sub { font-size: 11px; color: var(--gray); text-align: center; line-height: 1.4; }
-  .mock-badge {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: var(--orange);
-    color: white;
-    font-size: 9px;
-    font-weight: 800;
-    padding: 3px 8px;
-    border-radius: 10px;
-  }
-  .mock-impact {
-    margin-top: 14px;
-    background: rgba(240,165,30,0.15);
-    border-radius: 10px;
-    padding: 8px 12px;
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--orange);
-    text-align: center;
-  }
-
-  /* ── EMAIL CAPTURE ── */
-  .email-section {
-    background: linear-gradient(135deg, var(--orange), #e8931a);
-    padding: 80px 24px;
-    text-align: center;
-  }
-  .email-section h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 900; color: var(--dark); margin-bottom: 12px; }
-  .email-section p { font-size: 18px; color: rgba(0,0,0,0.6); margin-bottom: 40px; }
-  .email-form {
-    display: flex;
-    gap: 12px;
-    max-width: 480px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .email-input {
-    flex: 1;
-    min-width: 250px;
-    padding: 16px 24px;
-    border: none;
-    border-radius: 50px;
-    font-size: 16px;
-    outline: none;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  }
-  .email-submit {
-    background: var(--dark);
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    border-radius: 50px;
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  .email-submit:hover { transform: scale(1.05); }
-  .email-note { font-size: 12px; color: rgba(0,0,0,0.5); margin-top: 16px; }
-  .success-msg { display: none; background: var(--dark); color: white; padding: 16px 32px; border-radius: 50px; font-weight: 700; font-size: 16px; }
-
-  /* ── FOOTER ── */
-  footer {
-    background: var(--dark);
-    color: rgba(255,255,255,0.4);
-    text-align: center;
-    padding: 40px 24px;
-    font-size: 14px;
-  }
-  footer a { color: var(--orange); text-decoration: none; }
-
-
-  /* ── STORE BUTTONS ── two of them side by side on a wide screen, stacked on a phone */
-  .store-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .store-row .btn-primary { padding: 18px 40px; font-size: 19px; }
-  .store-row .btn-primary:not(.btn-dark) { background: #fff; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
-  .store-row .btn-dark { background: var(--dark); color: #fff; box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
-  .hero-note { color: rgba(255,255,255,0.85); font-weight: 600; }
-  .hero-tagline { color: rgba(255,255,255,0.8); font-weight: 700; }
-  .hero .app-icon img { width: 100%; height: 100%; display: block; }
   @media (max-width: 560px) {
-    .hero { padding: 56px 20px 72px; }
-    .hero-sub { margin-bottom: 36px; }
-    .store-row { flex-direction: column; align-items: stretch; max-width: 340px; margin: 0 auto; }
-    .store-row .btn-primary { padding: 16px 20px; font-size: 17px; text-align: center; }
-    .stats { gap: 22px 36px; }
-    .stat { flex: 0 0 40%; }
-    .section { padding: 56px 16px; }
-    .screenshots-section, .email-section { padding: 56px 16px; }
-    .section-sub { margin-bottom: 36px; }
-    .email-input { min-width: 0; width: 100%; }
+    .nav .wrap { height: 58px; }
+    .brand span { display: none; }
+    .nav-cta { padding: 8px 14px; font-size: 13px; }
+    .lang button { padding: 6px 10px; }
+    .hero h1 { font-size: clamp(48px, 14vw, 62px); }
+    .stores { flex-direction: column; align-items: stretch; }
+    .store { justify-content: center; }
+    .scroll-cue { display: none; }
   }
-
-  /* ── PRIVACY STRIP ── */
-  .privacy-strip { background: var(--white); padding: 56px 24px; }
-  .privacy-inner { max-width: 760px; margin: 0 auto; text-align: center; }
-  .privacy-inner h2 { font-size: clamp(24px, 3.4vw, 34px); font-weight: 900; margin-bottom: 12px; letter-spacing: -0.5px; }
-  .privacy-inner p { color: var(--gray); font-size: 16.5px; }
-  .privacy-inner a { color: #c47f08; font-weight: 700; }
-  .footer-links a { margin: 0 6px; display: inline-block; }
-  /* six feature frames: three by two on a wide screen instead of four and two */
-  .screenshots-grid { max-width: 680px; margin: 0 auto; }
-  @media (max-width: 560px) { .screenshots-grid { gap: 14px; } .screenshot-frame { width: calc(50% - 7px); height: 300px; } }
-  /* ── BILINGUAL ── */
-  [data-en], [data-es] { transition: opacity 0.2s; }
-  body.es [data-en] { display: none; }
-  body.en [data-es] { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero-media img.still, .scroll-cue::after { animation: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
 </style>
 </head>
 <body class="en">
 
-<!-- Sticky download bar: both stores, because it follows the visitor down the whole page -->
-<div class="sticky-cta">
-  <div class="sc-brand"><img src="icon.png" alt="Bright Miles"><span>Bright Miles</span></div>
-  <div class="sc-dls">
-    <a class="sc-dl" href="https://apps.apple.com/app/id6774821890">
-      <span data-en>⬇ iPhone<span class="sc-free"> · Free</span></span><span data-es>⬇ iPhone<span class="sc-free"> · Gratis</span></span>
-    </a>
-    <a class="sc-dl sc-dl-alt" href="https://play.google.com/store/apps/details?id=com.chines.brightside">
-      <span data-en>▶ Android<span class="sc-free"> · Free</span></span><span data-es>▶ Android<span class="sc-free"> · Gratis</span></span>
-    </a>
-  </div>
-</div>
-
-<!-- Language Bar -->
-<div class="lang-bar">
-  <button class="lang-btn active" onclick="setLang('en')">🇺🇸 English</button>
-  <button class="lang-btn" onclick="setLang('es')">🇨🇴 Español</button>
-</div>
-
-<!-- Hero -->
-<div class="hero">
-  <div class="app-icon" style="background:none; box-shadow:0 20px 60px rgba(0,0,0,0.25); padding:0; overflow:hidden;"><img src="icon.png" alt="Bright Miles app icon"></div>
-  <h1>Bright Miles</h1>
-  <p class="hero-tagline" data-en>Fitness, friends and good news</p>
-  <p class="hero-tagline" data-es>Fitness, amigos y buenas noticias</p>
-  <p class="hero-sub" data-en>Track your runs, steps and workouts. Ask Miles, your AI coach. Cheer on your friends, chat and call them, and read the good news of the day, free.</p>
-  <p class="hero-sub" data-es>Registra tus carreras, pasos y entrenamientos. Pregúntale a Miles, tu entrenador con IA. Anima a tus amigos, chatea y llámalos, y lee las buenas noticias del día, gratis.</p>
-
-  <div class="store-row">
-    <a href="https://apps.apple.com/app/id6774821890" class="btn-primary" id="appStoreBtn">
-      <span data-en>⬇ Download on the App Store</span>
-      <span data-es>⬇ Descargar en el App Store</span>
-    </a>
-    <a href="https://play.google.com/store/apps/details?id=com.chines.brightside" class="btn-primary btn-dark" id="playStoreBtn">
-      <span data-en>▶ Get it on Google Play</span>
-      <span data-es>▶ Disponible en Google Play</span>
-    </a>
-  </div>
-  <p class="hero-note" data-en>Free to download · iPhone, Android, Apple Watch and Wear OS · English and Spanish</p>
-  <p class="hero-note" data-es>Descarga gratis · iPhone, Android, Apple Watch y Wear OS · Inglés y español</p>
-</div>
-
-<!-- Stats: every number here is a fact about the product, not a boast -->
-<div class="stats">
-  <div class="stat">
-    <div class="stat-num">Free</div>
-    <div class="stat-label" data-en>Good news, every day</div>
-    <div class="stat-label" data-es>Buenas noticias, cada día</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">2</div>
-    <div class="stat-label" data-en>Watch apps</div>
-    <div class="stat-label" data-es>Apps de reloj</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">14</div>
-    <div class="stat-label" data-en>Day free trial of Miles</div>
-    <div class="stat-label" data-es>Días de prueba gratis de Miles</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">2</div>
-    <div class="stat-label" data-en>Languages</div>
-    <div class="stat-label" data-es>Idiomas</div>
-  </div>
-</div>
-
-<!-- What's inside -->
-<div class="section">
-  <h2 class="section-title" data-en>Everything in one app</h2>
-  <h2 class="section-title" data-es>Todo en una sola app</h2>
-  <p class="section-sub" data-en>Your training, your coach and your people, in the same place.</p>
-  <p class="section-sub" data-es>Tu entrenamiento, tu entrenador y tu gente, en el mismo lugar.</p>
-
-  <div class="why-grid">
-    <div class="why-card">
-      <div class="why-emoji">🏃</div>
-      <h3 data-en>Runs, steps and workouts</h3>
-      <h3 data-es>Carreras, pasos y entrenamientos</h3>
-      <p data-en>Track runs, walks and rides with GPS, log your strength sets, and count your steps. Food, weight, fasting and sleep live here too. Works with Apple Health and Health Connect.</p>
-      <p data-es>Registra carreras, caminatas y paseos en bici con GPS, anota tus series de fuerza y cuenta tus pasos. La comida, el peso, el ayuno y el sueño también están aquí. Funciona con Apple Health y Health Connect.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-emoji">⌚</div>
-      <h3 data-en>On your wrist</h3>
-      <h3 data-es>En tu muñeca</h3>
-      <p data-en>Start a workout on Apple Watch or a Wear OS watch, and it lands in the app on your phone when you are done.</p>
-      <p data-es>Empieza un entrenamiento en el Apple Watch o en un reloj Wear OS, y aparece en la app de tu teléfono cuando termines.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-emoji">🧠</div>
-      <h3 data-en>Miles, your AI coach</h3>
-      <h3 data-es>Miles, tu entrenador con IA</h3>
-      <p data-en>Ask about your own runs, lifts, food and sleep. Miles reads your numbers and answers in plain words. A few questions a day are free; the Miles plan gives you much more, with a 14-day free trial.</p>
-      <p data-es>Pregunta por tus carreras, tus pesas, tu comida y tu sueño. Miles lee tus números y te responde claro. Unas preguntas al día son gratis; el plan Miles te da mucho más, con 14 días de prueba gratis.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-emoji">💬</div>
-      <h3 data-en>Friends, chats and calls</h3>
-      <h3 data-es>Amigos, chats y llamadas</h3>
-      <p data-en>Follow your friends and cheer their workouts. Message one person or a group, send a voice note, or start a voice or video call, right in the app.</p>
-      <p data-es>Sigue a tus amigos y anima sus entrenamientos. Escríbele a una persona o a un grupo, manda una nota de voz, o haz una llamada de voz o de video, dentro de la app.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-emoji">☀️</div>
-      <h3 data-en>Tonight's Bright Miles</h3>
-      <h3 data-es>Tu Bright Miles de esta noche</h3>
-      <p data-en>At six in your own evening, a short recap of your people: a run, a record, a birthday. If your people had a quiet day, it stays quiet. No filler.</p>
-      <p data-es>A las seis de tu tarde, un resumen corto de tu gente: una carrera, un récord, un cumpleaños. Si tu gente tuvo un día tranquilo, se queda tranquilo. Sin relleno.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-emoji">🌍</div>
-      <h3 data-en>Good news, free</h3>
-      <h3 data-es>Buenas noticias, gratis</h3>
-      <p data-en>Stories that went right, from around the world, every day, plus what the world is celebrating today. News is free, with no story limit.</p>
-      <p data-es>Historias que salieron bien, de todo el mundo, cada día, además de lo que el mundo celebra hoy. Las noticias son gratis, sin límite de historias.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-emoji">🎙️</div>
-      <h3 data-en>A studio for podcasts and live streams</h3>
-      <h3 data-es>Un estudio para podcasts y transmisiones en vivo</h3>
-      <p data-en>Record a podcast, bring on guests, and go live, from the app or from the Bright Side Streams studio on the web.</p>
-      <p data-es>Graba un podcast, suma invitados y transmite en vivo, desde la app o desde el estudio Bright Side Streams en la web.</p>
-    </div>
-    <div class="why-card">
-      <div class="why-emoji">🗣️</div>
-      <h3 data-en>English and Spanish</h3>
-      <h3 data-es>Inglés y español</h3>
-      <p data-en>The whole app, Miles included, works in English or Spanish, and chats can translate a message for you.</p>
-      <p data-es>Toda la app, Miles incluido, funciona en inglés o en español, y los chats pueden traducirte un mensaje.</p>
-    </div>
-  </div>
-</div>
-
-<!-- A look inside: feature cards, not invented stories or numbers -->
-<div class="screenshots-section">
-  <div class="screenshots-inner">
-    <h2 class="section-title" data-en>A look inside</h2>
-    <h2 class="section-title" data-es>Un vistazo por dentro</h2>
-    <p class="section-sub" data-en>What you will find when you open it.</p>
-    <p class="section-sub" data-es>Lo que encontrarás al abrirla.</p>
-
-    <div class="screenshots-grid">
-      <div class="screenshot-frame">
-        <div class="screenshot-inner">
-          <div class="mock-badge">FITNESS</div>
-          <div class="mock-emoji">🏃</div>
-          <div class="mock-title" data-en>Your run</div>
-          <div class="mock-title" data-es>Tu carrera</div>
-          <div class="mock-sub" data-en>Route, pace and climb, saved to your history.</div>
-          <div class="mock-sub" data-es>Ruta, ritmo y desnivel, guardados en tu historial.</div>
-          <div class="mock-impact" data-en>GPS · Apple Health · Health Connect</div>
-          <div class="mock-impact" data-es>GPS · Apple Health · Health Connect</div>
-        </div>
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="icon.png" alt="Bright Miles" width="30" height="30"><span>Bright Miles</span></a>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" class="active" data-lang="en">EN</button>
+        <button type="button" data-lang="es">ES</button>
       </div>
+      <a class="nav-cta" href="#download"><span data-en>Get the app</span><span data-es>Descarga la app</span></a>
+    </div>
+  </div>
+</header>
 
-      <div class="screenshot-frame">
-        <div class="screenshot-inner" style="background:#1A1A2E;">
-          <div class="mock-emoji">🧠</div>
-          <div class="mock-title" style="color:white" data-en>Ask Miles</div>
-          <div class="mock-title" style="color:white" data-es>Pregúntale a Miles</div>
-          <div class="mock-sub" style="color:rgba(255,255,255,0.8)" data-en>"How did my training this week compare with last week?"</div>
-          <div class="mock-sub" style="color:rgba(255,255,255,0.8)" data-es>"¿Cómo fue mi entrenamiento esta semana comparado con la anterior?"</div>
-          <div class="mock-impact" data-en>Your AI coach</div>
-          <div class="mock-impact" data-es>Tu entrenador con IA</div>
-        </div>
+<!-- HERO: the golden-hour path (desktop: a still with a slow drift) or the app's own welcome loop (phone) -->
+<section class="hero" id="top">
+  <div class="hero-media" aria-hidden="true">
+    <picture>
+      <source media="(max-width: 900px)" srcset="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/loop/welcome-1.jpg">
+      <source type="image/webp" srcset="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-1440.webp 1440w, https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-2400.webp 2400w" sizes="100vw">
+      <img class="still" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-1440.jpg" alt="" fetchpriority="high">
+    </picture>
+    <video id="heroLoop" muted loop playsinline preload="none" data-mobile-src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/loop/welcome-1.mp4"></video>
+  </div>
+  <div class="wrap">
+    <div>
+      <p class="eyebrow on-dark" data-en>Fitness · Friends · Good news</p>
+      <p class="eyebrow on-dark" data-es>Fitness · Amigos · Buenas noticias</p>
+      <h1 data-en>Every mile is better <em>together.</em></h1>
+      <h1 data-es>Cada milla es mejor <em>juntos.</em></h1>
+      <p class="lede" data-en>Track your runs, steps and workouts. Ask Miles, your AI coach. Chat and call the people who cheer you on, and read the good news of the day, free.</p>
+      <p class="lede" data-es>Registra tus carreras, pasos y entrenamientos. Pregúntale a Miles, tu entrenador con IA. Chatea y llama a quienes te animan, y lee las buenas noticias del día, gratis.</p>
+      <div class="stores">
+        <a class="store" href="https://apps.apple.com/app/id6774821890">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <span><small data-en>Download on the</small><small data-es>Descárgala en el</small><b>App Store</b></span>
+        </a>
+        <a class="store" href="https://play.google.com/store/apps/details?id=com.chines.brightside">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#00D7FE" d="M3.6 2.2 13.5 12l-9.9 9.8c-.4-.2-.6-.6-.6-1.1V3.3c0-.5.2-.9.6-1.1z"/><path fill="#FFCE00" d="m17 8.5-3.5 3.5 3.5 3.5 4-2.3c.9-.5.9-1.8 0-2.3z"/><path fill="#00F076" d="M3.6 2.2c.3-.2.8-.2 1.2 0L17 8.5 13.5 12z"/><path fill="#FF3A44" d="M13.5 12 17 15.5 4.8 21.8c-.4.2-.9.2-1.2 0z"/></svg>
+          <span><small data-en>Get it on</small><small data-es>Disponible en</small><b>Google Play</b></span>
+        </a>
       </div>
+      <p class="hero-note" data-en>Free to download. iPhone, Android, Apple Watch and Wear OS. English and Spanish.</p>
+      <p class="hero-note" data-es>Descarga gratis. iPhone, Android, Apple Watch y Wear OS. Inglés y español.</p>
+    </div>
+    <div class="hero-device" aria-hidden="true">
+      <div class="phone"><div class="screen"><img src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/app-run.jpg" alt="" width="600" height="1300"></div></div>
+      <div class="watch"><div class="screen"><img src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/watch-metrics-b.jpg" alt="" width="416" height="424"></div></div>
+    </div>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"></div>
+</section>
 
-      <div class="screenshot-frame">
-        <div class="screenshot-inner">
-          <div class="mock-emoji">☀️</div>
-          <div class="mock-title" data-en>Tonight's Bright Miles</div>
-          <div class="mock-title" data-es>Tu Bright Miles de esta noche</div>
-          <div class="mock-sub" data-en>What your people did today, at six in your evening.</div>
-          <div class="mock-sub" data-es>Lo que hizo tu gente hoy, a las seis de tu tarde.</div>
-          <div class="mock-impact" data-en>Only when there is news</div>
-          <div class="mock-impact" data-es>Solo cuando hay novedades</div>
-        </div>
-      </div>
+<!-- FACTS: each one is a fact about the product, not a boast -->
+<section class="facts" aria-label="At a glance">
+  <div class="wrap">
+    <div class="fact"><div class="serif" data-en>Free</div><div class="serif" data-es>Gratis</div><p data-en>Good news, every day</p><p data-es>Buenas noticias, cada día</p></div>
+    <div class="fact"><div class="serif">2</div><p data-en>Watch apps, Apple Watch and Wear OS</p><p data-es>Apps de reloj, Apple Watch y Wear OS</p></div>
+    <div class="fact"><div class="serif" data-en>14 days</div><div class="serif" data-es>14 días</div><p data-en>Free trial of the Miles plan</p><p data-es>Prueba gratis del plan Miles</p></div>
+    <div class="fact"><div class="serif">EN · ES</div><p data-en>The whole app, in English or Spanish</p><p data-es>Toda la app, en inglés o en español</p></div>
+  </div>
+</section>
 
-      <div class="screenshot-frame">
-        <div class="screenshot-inner" style="background:#2A9D8F;">
-          <div class="mock-emoji">🌍</div>
-          <div class="mock-title" style="color:white" data-en>Good news</div>
-          <div class="mock-title" style="color:white" data-es>Buenas noticias</div>
-          <div class="mock-sub" style="color:rgba(255,255,255,0.85)" data-en>Stories that went right, from every corner of the world.</div>
-          <div class="mock-sub" style="color:rgba(255,255,255,0.85)" data-es>Historias que salieron bien, de todos los rincones del mundo.</div>
-          <div class="mock-impact" style="background:rgba(255,255,255,0.2); color:white" data-en>Free, every day</div>
-          <div class="mock-impact" style="background:rgba(255,255,255,0.2); color:white" data-es>Gratis, cada día</div>
-        </div>
-      </div>
+<!-- TRAIN: three real app screens (the store shots, rendered from the app's own source) in CSS phone frames -->
+<section class="train light pad" id="train">
+  <div class="wrap">
+    <div class="head center reveal">
+      <p class="eyebrow" data-en>Your training</p><p class="eyebrow" data-es>Tu entrenamiento</p>
+      <h2 data-en>Every run, rep and step, <em>in one place.</em></h2>
+      <h2 data-es>Cada carrera, serie y paso, <em>en un solo lugar.</em></h2>
+      <p class="lede" data-en>Track runs, walks and rides with GPS, log your strength sets and count your steps. It works with Apple Health and Health Connect, so what you already track comes with you.</p>
+      <p class="lede" data-es>Registra carreras, caminatas y paseos en bici con GPS, anota tus series de fuerza y cuenta tus pasos. Funciona con Apple Health y Health Connect, así lo que ya registras viene contigo.</p>
+    </div>
+    <div class="trio">
+      <figure class="reveal">
+        <div class="phone"><div class="screen"><img loading="lazy" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/app-run.jpg" alt="A run in Bright Miles: route, distance, pace, climb and heart rate" width="600" height="1300"></div></div>
+        <figcaption>
+          <h3 data-en>Your run, told back to you</h3><h3 data-es>Tu carrera, contada de vuelta</h3>
+          <p data-en>Route, pace, splits, climb and heart rate, saved to your history.</p>
+          <p data-es>Ruta, ritmo, parciales, desnivel y pulso, guardados en tu historial.</p>
+        </figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="phone"><div class="screen"><img loading="lazy" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/app-strength.jpg" alt="The strength screen: a strength score, a body map and which muscles are ready to train" width="600" height="1300"></div></div>
+        <figcaption>
+          <h3 data-en>Strength you can see</h3><h3 data-es>Fuerza que se ve</h3>
+          <p data-en>Log your sets and see which muscles are recovering and which are ready to train.</p>
+          <p data-es>Anota tus series y mira qué músculos se recuperan y cuáles están listos para entrenar.</p>
+        </figcaption>
+      </figure>
+      <figure class="reveal">
+        <div class="phone"><div class="screen"><img loading="lazy" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/app-coach.jpg" alt="A chat with Miles about protein, with a meal ready to add to the food log" width="600" height="1300"></div></div>
+        <figcaption>
+          <h3 data-en>Food, weight, fasting, sleep</h3><h3 data-es>Comida, peso, ayuno, sueño</h3>
+          <p data-en>Tell Miles what you ate and he offers to add it to your log.</p>
+          <p data-es>Dile a Miles lo que comiste y él te ofrece agregarlo a tu registro.</p>
+        </figcaption>
+      </figure>
+    </div>
+    <div class="chips reveal">
+      <span data-en>GPS runs, walks and rides</span><span data-es>Carreras, caminatas y bici con GPS</span>
+      <span data-en>Strength log</span><span data-es>Registro de fuerza</span>
+      <span data-en>Steps</span><span data-es>Pasos</span>
+      <span data-en>Food and weight</span><span data-es>Comida y peso</span>
+      <span data-en>Fasting</span><span data-es>Ayuno</span>
+      <span data-en>Sleep and heart</span><span data-es>Sueño y corazón</span>
+      <span>Apple Health</span><span>Health Connect</span>
+    </div>
+  </div>
+</section>
 
-      <div class="screenshot-frame">
-        <div class="screenshot-inner">
-          <div class="mock-emoji">📞</div>
-          <div class="mock-title" data-en>Chats and calls</div>
-          <div class="mock-title" data-es>Chats y llamadas</div>
-          <div class="mock-sub" data-en>Messages, voice notes, and voice or video calls with friends and groups.</div>
-          <div class="mock-sub" data-es>Mensajes, notas de voz y llamadas de voz o video con amigos y grupos.</div>
-          <div class="mock-impact" data-en>Built into the app</div>
-          <div class="mock-impact" data-es>Dentro de la app</div>
-        </div>
-      </div>
+<!-- MOVES: nine clips from the Bright Miles move library (ui/site/v2/moves, light web cuts of ui/moves/v1). Lazy: a clip only loads and plays while it is on screen. -->
+<section class="moves dark pad" id="moves">
+  <div class="wrap">
+    <div class="head center reveal">
+      <p class="eyebrow" data-en>Workouts</p><p class="eyebrow" data-es>Entrenamientos</p>
+      <h2 data-en>See the move. <em>Then own it.</em></h2>
+      <h2 data-es>Mira el movimiento. <em>Y hazlo tuyo.</em></h2>
+      <p class="lede" data-en>Each move in your workout comes with a video, so you know the form before you start. No gym today? Choose no equipment and train at home.</p>
+      <p class="lede" data-es>Cada movimiento de tu entrenamiento trae un video, para que conozcas la técnica antes de empezar. ¿Hoy sin gimnasio? Elige sin equipo y entrena en casa.</p>
+    </div>
+    <div class="wall reveal" id="wall">
+      <div class="tile" data-move="squat"><span data-en>Bodyweight Squat</span><span data-es>Sentadilla</span></div>
+      <div class="tile" data-move="mtnClimber"><span data-en>Mountain Climbers</span><span data-es>Escaladores</span></div>
+      <div class="tile" data-move="fwdLunge"><span data-en>Forward Lunge</span><span data-es>Zancada al frente</span></div>
+      <div class="tile" data-move="plank"><span data-en>Forearm Plank</span><span data-es>Plancha de antebrazos</span></div>
+      <div class="tile" data-move="jumpSquat"><span data-en>Jump Squats</span><span data-es>Sentadillas con salto</span></div>
+      <div class="tile" data-move="pushup"><span data-en>Push-ups</span><span data-es>Flexiones</span></div>
+      <div class="tile" data-move="bridge"><span data-en>Glute Bridge</span><span data-es>Puente de glúteos</span></div>
+      <div class="tile" data-move="highKnees"><span data-en>High Knees</span><span data-es>Rodillas arriba</span></div>
+      <div class="tile" data-move="russian"><span data-en>Russian Twist</span><span data-es>Giro ruso</span></div>
+    </div>
+    <p class="fine" data-en>Clips from the Bright Miles move library. The coach is a digital model, not a real person.</p>
+    <p class="fine" data-es>Clips de la biblioteca de movimientos de Bright Miles. La entrenadora es un modelo digital, no una persona real.</p>
+  </div>
+</section>
 
-      <div class="screenshot-frame">
-        <div class="screenshot-inner" style="background:#2db964;">
-          <div class="mock-emoji">🎙️</div>
-          <div class="mock-title" style="color:white" data-en>The studio</div>
-          <div class="mock-title" style="color:white" data-es>El estudio</div>
-          <div class="mock-sub" style="color:rgba(255,255,255,0.85)" data-en>Record a podcast or go live with guests.</div>
-          <div class="mock-sub" style="color:rgba(255,255,255,0.85)" data-es>Graba un podcast o transmite en vivo con invitados.</div>
-          <div class="mock-impact" style="background:rgba(255,255,255,0.2); color:white" data-en>Podcasts and live streams</div>
-          <div class="mock-impact" style="background:rgba(255,255,255,0.2); color:white" data-es>Podcasts y transmisiones en vivo</div>
+<!-- MILES: the official gold 3D Miles (_work/miles-3d/official) on the black marble. Claims: app-privacy.html section 5, milesPlans.js, the one plan approved 23 Sep. -->
+<section class="miles dark pad" id="miles">
+  <div class="wrap">
+    <div class="miles-art reveal">
+      <div class="disc"><img loading="lazy" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/miles-34.webp" alt="Miles, the gold sun who coaches you in Bright Miles" width="700" height="700"></div>
+      <div class="watch"><div class="screen"><img loading="lazy" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/watch-miles-b.jpg" alt="Asking Miles a question on Apple Watch" width="416" height="424"></div></div>
+    </div>
+    <div class="reveal">
+      <p class="eyebrow" data-en>Your AI coach</p><p class="eyebrow" data-es>Tu entrenador con IA</p>
+      <h2 data-en>Meet Miles. <em>He knows your numbers.</em></h2>
+      <h2 data-es>Conoce a Miles. <em>Él conoce tus números.</em></h2>
+      <ul class="points">
+        <li data-en>Ask about your own runs, lifts, food, weight and sleep, and get an answer in plain words.</li>
+        <li data-es>Pregunta por tus carreras, tus pesas, tu comida, tu peso y tu sueño, y recibe una respuesta clara.</li>
+        <li data-en>He only ever reads your data. There is no way to ask him about anyone else.</li>
+        <li data-es>Solo lee tus datos. No hay forma de preguntarle por otra persona.</li>
+        <li data-en>Ask him in English or Spanish, on your phone or on your wrist.</li>
+        <li data-es>Pregúntale en inglés o en español, en tu teléfono o en tu muñeca.</li>
+      </ul>
+      <p class="plan" data-en>A few questions a day are free. <b>The Miles plan</b> gives you much more, and starts with a <b>14-day free trial</b>.</p>
+      <p class="plan" data-es>Unas preguntas al día son gratis. <b>El plan Miles</b> te da mucho más, y empieza con <b>14 días de prueba gratis</b>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WRIST: the real watch screens (AppStore_Screenshots/_ordered_watch and _work/watchend/wear-shots/large-round) -->
+<section class="wrist light pad" id="wrist">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow" data-en>On your wrist</p><p class="eyebrow" data-es>En tu muñeca</p>
+      <h2 data-en>Leave the phone. <em>Keep every number.</em></h2>
+      <h2 data-es>Deja el teléfono. <em>Conserva cada número.</em></h2>
+      <p class="lede" style="margin-top:18px" data-en>Start a workout on Apple Watch or a Wear OS watch and see your time, heart rate, pace and distance as you go. When you finish, it lands in the app on your phone.</p>
+      <p class="lede" style="margin-top:18px" data-es>Empieza un entrenamiento en el Apple Watch o en un reloj Wear OS y mira tu tiempo, pulso, ritmo y distancia mientras avanzas. Al terminar, aparece en la app de tu teléfono.</p>
+    </div>
+    <div class="watches reveal">
+      <figure>
+        <div class="watch"><div class="screen"><img loading="lazy" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/watch-metrics-b.jpg" alt="A live workout on Apple Watch: time, heart rate, calories, distance and pace" width="416" height="424"></div></div>
+        <figcaption>Apple Watch</figcaption>
+      </figure>
+      <figure>
+        <div class="round"><div class="screen"><img loading="lazy" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/wear-home.jpg" alt="Bright Miles on a round Wear OS watch: steps today and Start a workout" width="400" height="400"></div></div>
+        <figcaption>Wear OS</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- PEOPLE: pictures are the app's own golden-hour headers (ui/call, ui/social, ui/journal, ui/studio, ui/loop) -->
+<section class="people light pad" id="people">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow" data-en>Your people</p><p class="eyebrow" data-es>Tu gente</p>
+      <h2 data-en>The people who cheer you on, <em>right here.</em></h2>
+      <h2 data-es>Quienes te animan, <em>aquí mismo.</em></h2>
+    </div>
+    <div class="cards">
+      <article class="card wide reveal">
+        <div class="pic" data-bg="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/social/messages.jpg"></div>
+        <div class="body">
+          <h3 data-en>Chats and calls</h3><h3 data-es>Chats y llamadas</h3>
+          <p data-en>Follow your friends and cheer their workouts. Message one person or a group, send a voice note, or start a voice or video call, right in the app.</p>
+          <p data-es>Sigue a tus amigos y anima sus entrenamientos. Escríbele a una persona o a un grupo, manda una nota de voz, o haz una llamada de voz o de video, dentro de la app.</p>
         </div>
+      </article>
+      <article class="card wide reveal">
+        <div class="pic" data-bg="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/social/friends.jpg"></div>
+        <div class="body">
+          <h3 data-en>Two languages, one chat</h3><h3 data-es>Dos idiomas, un chat</h3>
+          <p data-en>The whole app works in English or Spanish, and a chat can translate a message for you.</p>
+          <p data-es>Toda la app funciona en inglés o en español, y un chat puede traducirte un mensaje.</p>
+        </div>
+      </article>
+      <article class="card ink reveal">
+        <div class="pic" data-bg="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/journal/night.jpg" style="background-position:center 70%"></div>
+        <div class="body">
+          <h3 data-en>Tonight's Bright Miles</h3><h3 data-es>Tu Bright Miles de esta noche</h3>
+          <p data-en>At six in your evening, a short recap of your people: a run, a record, a birthday. On a quiet day, it stays quiet.</p>
+          <p data-es>A las seis de tu tarde, un resumen corto de tu gente: una carrera, un récord, un cumpleaños. En un día tranquilo, se queda tranquilo.</p>
+        </div>
+      </article>
+      <article class="card reveal">
+        <div class="pic" data-bg="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/loop/welcome-3.jpg" style="background-position:center 75%"></div>
+        <div class="body">
+          <h3 data-en>Good news, free</h3><h3 data-es>Buenas noticias, gratis</h3>
+          <p data-en>Stories that went right, from around the world, every day, plus what the world is celebrating today. No story limit.</p>
+          <p data-es>Historias que salieron bien, de todo el mundo, cada día, y lo que el mundo celebra hoy. Sin límite de historias.</p>
+        </div>
+      </article>
+      <article class="card ink reveal">
+        <div class="pic" data-bg="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/studio/hero.jpg" style="background-position:center 60%"></div>
+        <div class="body">
+          <h3 data-en>Your own studio</h3><h3 data-es>Tu propio estudio</h3>
+          <p data-en>Record a podcast, bring on guests and go live, from the app or from the Bright Side Streams studio on the web.</p>
+          <p data-es>Graba un podcast, suma invitados y transmite en vivo, desde la app o desde el estudio Bright Side Streams en la web.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- WINS: the September step champion film, used as made (_work/step-champ). l7evin agreed to be posted publicly.
+     No @ before the username in our own copy (the app username is not a social handle). The film loads only on tap. -->
+<section class="wins dark pad" id="wins">
+  <div class="wrap">
+    <div class="film reveal" id="film" style="background-image:url('https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/step-champion-poster.jpg')">
+      <button type="button" id="filmPlay" aria-label="Play the September step champion film"><i></i><em data-en>Play the film · 29 s</em><em data-es>Ver el video · 29 s</em></button>
+    </div>
+    <div class="reveal">
+      <p class="eyebrow" data-en>Real members, real wins</p><p class="eyebrow" data-es>Miembros reales, logros reales</p>
+      <h2 data-en>September's step champion <em>walked 308,178 steps.</em></h2>
+      <h2 data-es>El campeón de pasos de septiembre <em>caminó 308,178 pasos.</em></h2>
+      <p class="lede" style="margin-top:18px" data-en>Every month, members race on the Bright Miles step board. In September, l7evin took first place. The October board is already counting.</p>
+      <p class="lede" style="margin-top:18px" data-es>Cada mes, los miembros compiten en la tabla de pasos de Bright Miles. En septiembre, l7evin quedó en primer lugar. La tabla de octubre ya está contando.</p>
+      <div class="stat-row">
+        <div><div class="serif">308,178</div><p data-en>steps in September</p><p data-es>pasos en septiembre</p></div>
+        <div><div class="serif" data-en>about 10,000</div><div class="serif" data-es>unos 10,000</div><p data-en>steps a day, on average</p><p data-es>pasos al día, en promedio</p></div>
+        <div><div class="serif" data-en>about 150</div><div class="serif" data-es>unas 150</div><p data-en>miles on foot</p><p data-es>millas a pie</p></div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Privacy: only what app-privacy.html says today. No ad-free promise (Charles wants the option of ads). -->
-<div class="privacy-strip">
-  <div class="privacy-inner">
-    <h2 data-en>Your data stays yours</h2>
-    <h2 data-es>Tus datos siguen siendo tuyos</h2>
-    <p data-en>We have never sold personal data. No cross-site tracking. Your health data is never sold and never used for advertising. <a href="https://brightsidestreams.com/app-privacy">Read the app privacy policy</a>.</p>
-    <p data-es>Nunca hemos vendido datos personales. Sin rastreo entre sitios. Tus datos de salud nunca se venden ni se usan para publicidad. <a href="https://brightsidestreams.com/app-privacy">Lee la política de privacidad de la app</a>.</p>
+<!-- PRIVACY: only lines from app-privacy.html as it stands today. No ad-free promise (Charles keeps the option of ads). -->
+<section class="privacy" id="privacy">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow" data-en>Privacy</p><p class="eyebrow" data-es>Privacidad</p>
+      <h2 data-en>Your data <em>stays yours.</em></h2>
+      <h2 data-es>Tus datos <em>siguen siendo tuyos.</em></h2>
+    </div>
+    <div class="promises reveal">
+      <p data-en>We have never sold personal data.</p><p data-es>Nunca hemos vendido datos personales.</p>
+      <p data-en>Your health data is never sold and never used for advertising.</p><p data-es>Tus datos de salud nunca se venden ni se usan para publicidad.</p>
+      <p data-en>No cross-site tracking. Delete your account in the app and what you put in goes with it.</p><p data-es>Sin rastreo entre sitios. Elimina tu cuenta en la app y lo que pusiste se va con ella.</p>
+      <p style="background:none;border:0;padding:4px 2px" data-en><a class="more" href="https://brightsidestreams.com/app-privacy">Read the app privacy policy</a></p>
+      <p style="background:none;border:0;padding:4px 2px" data-es><a class="more" href="https://brightsidestreams.com/app-privacy">Lee la política de privacidad de la app</a></p>
+    </div>
   </div>
-</div>
+</section>
 
-<!-- Email Capture -->
-<div class="email-section">
-  <h2 data-en>Hear what is new 🌟</h2>
-  <h2 data-es>Entérate de lo nuevo 🌟</h2>
-  <p data-en>Leave your email and we will tell you when new features arrive.</p>
-  <p data-es>Deja tu correo y te avisaremos cuando lleguen nuevas funciones.</p>
+<!-- FINAL CALL TO ACTION + the same Formspree sign-up as before -->
+<section class="final dark pad" id="download">
+  <div class="wrap">
+    <p class="eyebrow reveal" data-en>Free to download</p><p class="eyebrow reveal" data-es>Descarga gratis</p>
+    <h2 class="reveal" data-en>Your next mile <em>starts here.</em></h2>
+    <h2 class="reveal" data-es>Tu próxima milla <em>empieza aquí.</em></h2>
+    <div class="stores reveal">
+      <a class="store" href="https://apps.apple.com/app/id6774821890">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <span><small data-en>Download on the</small><small data-es>Descárgala en el</small><b>App Store</b></span>
+      </a>
+      <a class="store" href="https://play.google.com/store/apps/details?id=com.chines.brightside">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#00D7FE" d="M3.6 2.2 13.5 12l-9.9 9.8c-.4-.2-.6-.6-.6-1.1V3.3c0-.5.2-.9.6-1.1z"/><path fill="#FFCE00" d="m17 8.5-3.5 3.5 3.5 3.5 4-2.3c.9-.5.9-1.8 0-2.3z"/><path fill="#00F076" d="M3.6 2.2c.3-.2.8-.2 1.2 0L17 8.5 13.5 12z"/><path fill="#FF3A44" d="M13.5 12 17 15.5 4.8 21.8c-.4.2-.9.2-1.2 0z"/></svg>
+        <span><small data-en>Get it on</small><small data-es>Disponible en</small><b>Google Play</b></span>
+      </a>
+    </div>
+    <p class="getline reveal" data-en>On your phone? Open <a href="http://get.brightmilesapp.com">get.brightmilesapp.com</a> and it takes you to the right store.</p>
+    <p class="getline reveal" data-es>¿En tu teléfono? Abre <a href="http://get.brightmilesapp.com">get.brightmilesapp.com</a> y te lleva a la tienda correcta.</p>
+    <div class="signup reveal">
+      <p data-en>Leave your email and we will tell you when new features arrive.</p>
+      <p data-es>Deja tu correo y te avisaremos cuando lleguen nuevas funciones.</p>
+      <form id="emailForm" action="https://formspree.io/f/xredwwzd" method="POST">
+        <input type="email" name="email" placeholder="your@email.com" required aria-label="Email">
+        <button type="submit"><span data-en>Notify me</span><span data-es>Avísame</span></button>
+      </form>
+      <p class="ok" id="okMsg"><span data-en>You're on the list. We'll be in touch.</span><span data-es>Estás en la lista. Te avisaremos.</span></p>
+      <small data-en>No spam. Unsubscribe anytime.</small><small data-es>Sin spam. Cancela cuando quieras.</small>
+    </div>
+  </div>
+</section>
 
-  <form class="email-form" id="emailForm" action="https://formspree.io/f/xredwwzd" method="POST">
-    <input type="email" name="email" class="email-input" placeholder="your@email.com" required>
-    <button type="submit" class="email-submit" data-en>Notify me ☀️</button>
-    <button type="submit" class="email-submit" data-es>Notifícame ☀️</button>
-  </form>
-  <div class="success-msg" id="successMsg" data-en>💛 You're on the list! We'll be in touch.</div>
-  <div class="success-msg" id="successMsgEs" data-es>💛 ¡Estás en la lista! Te avisaremos.</div>
-  <p class="email-note" data-en>No spam. Unsubscribe anytime.</p>
-  <p class="email-note" data-es>Sin spam. Cancela cuando quieras.</p>
-</div>
-
-<!-- Footer -->
 <footer>
-  <p>☀️ <strong style="color:var(--orange)">Bright Miles</strong> <span data-en>· Made with love by Charles Hines</span><span data-es>· Hecho con cariño por Charles Hines</span></p>
-  <p class="footer-links" style="margin-top:12px">
-    <a href="https://getbrightsideapp.com/privacy_policy.html" data-en>Privacy Policy</a>
-    <a href="https://getbrightsideapp.com/privacy_policy.html" data-es>Política de Privacidad</a>
-    <a href="https://getbrightsideapp.com/support.html" data-en>Support</a>
-    <a href="https://getbrightsideapp.com/support.html" data-es>Soporte</a>
-    <a href="https://getbrightsideapp.com/copyright.html">Copyright</a>
-    <a href="mailto:getbrightside.app@gmail.com">getbrightside.app@gmail.com</a>
-  </p>
-  <p style="margin-top:12px; font-size:12px" data-en>© 2026 Charles Hines. All rights reserved.</p>
-  <p style="margin-top:12px; font-size:12px" data-es>© 2026 Charles Hines. Todos los derechos reservados.</p>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="icon.png" alt="" width="30" height="30"><span>Bright Miles</span></a>
+    <nav>
+      <a href="https://brightsidestreams.com/app-privacy"><span data-en>Privacy Policy</span><span data-es>Política de Privacidad</span></a>
+      <a href="https://getbrightsideapp.com/support.html"><span data-en>Support</span><span data-es>Soporte</span></a>
+      <a href="https://getbrightsideapp.com/copyright.html">Copyright</a>
+      <a href="mailto:getbrightside.app@gmail.com">getbrightside.app@gmail.com</a>
+    </nav>
+    <p class="copy" data-en>© 2026 Charles Hines. All rights reserved. Made with love by Charles Hines.</p>
+    <p class="copy" data-es>© 2026 Charles Hines. Todos los derechos reservados. Hecho con cariño por Charles Hines.</p>
+  </div>
 </footer>
 
 <script>
-function setLang(lang) {
-  document.body.className = lang;
-  document.documentElement.lang = lang;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
-}
+(function () {
+  var R2 = 'https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var saveData = navigator.connection && navigator.connection.saveData;
 
-// Auto-detect browser language
-const browserLang = navigator.language?.substring(0, 2).toLowerCase();
-if (browserLang === 'es') setLang('es');
-
-// Email form
-document.getElementById('emailForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const form = e.target;
-  const data = new FormData(form);
-  try {
-    await fetch(form.action, {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    });
-    form.style.display = 'none';
-    document.getElementById('successMsg').style.display = 'block';
-    document.getElementById('successMsgEs').style.display = 'block';
-  } catch {
-    alert('Something went wrong. Please email us at getbrightside.app@gmail.com');
+  // language: browser language first, a tap overrides it and is remembered on this device
+  function setLang(lang) {
+    document.body.className = lang;
+    document.documentElement.lang = lang;
+    document.querySelectorAll('.lang button').forEach(function (b) { b.classList.toggle('active', b.dataset.lang === lang); });
   }
-});
+  var saved = null; try { saved = localStorage.getItem('bm-lang'); } catch (e) {}
+  var nav = (navigator.language || '').slice(0, 2).toLowerCase();
+  var q = (location.search.match(/[?&]lang=(en|es)\b/) || [])[1];
+  setLang(q || saved || (nav === 'es' ? 'es' : 'en'));
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.dataset.lang); try { localStorage.setItem('bm-lang', b.dataset.lang); } catch (e) {} });
+  });
+
+  // nav turns solid once the hero scrolls away
+  var navEl = document.getElementById('nav');
+  function onScroll() { navEl.classList.toggle('solid', window.scrollY > 40); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // background pictures on cards load when they come near the screen
+  var io = 'IntersectionObserver' in window;
+  var bgs = document.querySelectorAll('[data-bg]');
+  if (io) {
+    var bgObs = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.style.backgroundImage = "url('" + e.target.dataset.bg + "')"; bgObs.unobserve(e.target); } }); }, { rootMargin: '400px 0px' });
+    bgs.forEach(function (el) { bgObs.observe(el); });
+  } else bgs.forEach(function (el) { el.style.backgroundImage = "url('" + el.dataset.bg + "')"; });
+
+  // reveal on scroll
+  var rv = document.querySelectorAll('.reveal');
+  if (io && !reduce) {
+    var rvObs = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); rvObs.unobserve(e.target); } }); }, { rootMargin: '0px 0px -8% 0px' });
+    rv.forEach(function (el) { rvObs.observe(el); });
+  } else rv.forEach(function (el) { el.classList.add('in'); });
+
+  // hero: on a phone, the app's own welcome loop fades in over its poster after the page has loaded
+  var hero = document.getElementById('heroLoop');
+  if (!reduce && !saveData && window.matchMedia('(max-width: 900px)').matches) {
+    window.addEventListener('load', function () {
+      hero.src = hero.dataset.mobileSrc;
+      hero.addEventListener('playing', function () { hero.classList.add('on'); }, { once: true });
+      var p = hero.play(); if (p && p.catch) p.catch(function () {});
+    });
+  }
+
+  // move wall: posters first; each clip loads and plays only while it is on screen
+  var tiles = document.querySelectorAll('.tile');
+  tiles.forEach(function (t) { t.style.backgroundImage = "url('" + R2 + 'moves/' + t.dataset.move + ".jpg')"; });
+  if (io && !reduce && !saveData) {
+    var tObs = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var t = e.target, v = t.querySelector('video');
+        if (e.isIntersecting) {
+          if (!v) {
+            v = document.createElement('video');
+            v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+            v.preload = 'auto'; v.src = R2 + 'moves/' + t.dataset.move + '.mp4';
+            v.addEventListener('playing', function () { v.classList.add('on'); });
+            t.insertBefore(v, t.firstChild);
+          }
+          var p = v.play(); if (p && p.catch) p.catch(function () {});
+        } else if (v) v.pause();
+      });
+    }, { threshold: 0.25 });
+    tiles.forEach(function (t) { tObs.observe(t); });
+  }
+
+  // the step film loads only when someone taps play
+  var film = document.getElementById('film'), fb = document.getElementById('filmPlay');
+  fb.addEventListener('click', function () {
+    var v = document.createElement('video');
+    v.src = R2 + 'step-champion-720.mp4'; v.controls = true; v.playsInline = true; v.setAttribute('playsinline', '');
+    v.poster = R2 + 'step-champion-poster.jpg';
+    film.appendChild(v); fb.remove();
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  });
+
+  // email sign-up (same Formspree form as before)
+  var form = document.getElementById('emailForm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error(); form.style.display = 'none'; document.getElementById('okMsg').style.display = 'block'; })
+      .catch(function () { alert('Something went wrong. Please email us at getbrightside.app@gmail.com'); });
+  });
+})();
 </script>
 </body>
 </html>
