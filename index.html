@@ -102,6 +102,7 @@
   .hero-media { position: absolute; inset: 0; }
   .hero-media picture, .hero-media img, .hero-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .hero-media img.still { animation: drift 28s ease-in-out infinite alternate; transform-origin: 62% 45%; }
+  .hero.has-loop .hero-media img.still { animation: none; } /* the desktop loop moves on its own; a zoomed still under it would jump on the fade */
   .hero-media video { opacity: 0; transition: opacity 1.2s ease; }
   .hero-media video.on { opacity: 1; }
   @keyframes drift { from { transform: scale(1.02); } to { transform: scale(1.09); } }
@@ -324,7 +325,7 @@
       <source type="image/webp" srcset="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-1440.webp 1440w, https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-2400.webp 2400w" sizes="100vw">
       <img class="still" src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-path-1440.jpg" alt="" fetchpriority="high">
     </picture>
-    <video id="heroLoop" muted loop playsinline preload="none" data-mobile-src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/loop/welcome-1.mp4"></video>
+    <video id="heroLoop" muted loop playsinline preload="none" data-mobile-src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/loop/welcome-1.mp4" data-desktop-src="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-loop-720.mp4" data-desktop-poster="https://pub-4bee8b06489e4fcf9d843bb742928caf.r2.dev/ui/site/v2/hero-loop-poster.jpg"></video>
   </div>
   <div class="wrap">
     <div>
@@ -665,11 +666,14 @@
     rv.forEach(function (el) { rvObs.observe(el); });
   } else rv.forEach(function (el) { el.classList.add('in'); });
 
-  // hero: on a phone, the app's own welcome loop fades in over its poster after the page has loaded
+  // hero: after the page has loaded, a loop fades in over the still (the still stays as the fallback).
+  // Phone: the app's own welcome loop. Desktop: the golden-hour path, 8 s, same first and last frame.
   var hero = document.getElementById('heroLoop');
-  if (!reduce && !saveData && window.matchMedia('(max-width: 900px)').matches) {
+  var phone = window.matchMedia('(max-width: 900px)').matches;
+  if (!reduce && !saveData) {
+    if (!phone) document.getElementById('top').classList.add('has-loop'); // the still is the poster: same frame, sharper
     window.addEventListener('load', function () {
-      hero.src = hero.dataset.mobileSrc;
+      hero.src = phone ? hero.dataset.mobileSrc : hero.dataset.desktopSrc;
       hero.addEventListener('playing', function () { hero.classList.add('on'); }, { once: true });
       var p = hero.play(); if (p && p.catch) p.catch(function () {});
     });
