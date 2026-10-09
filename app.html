@@ -269,6 +269,10 @@ document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = 
 
 var S = { user:null, token:null, guest:false, view:'feed', mode:'all', convo:null, pollTimer:null, groups:[], liked:{}, followed:{} };
 try { S.user = localStorage.getItem('bsw_user'); S.token = localStorage.getItem('bsw_token'); S.guest = localStorage.getItem('bsw_guest') === '1'; } catch (e) {}
+/* 🔑 A saved name with no login (a sign-in from before logins existed) is signed out (9 Oct 2026): a like, a follow, a
+   message is the LOGIN's on the server now, and a name alone did each of them silently wrong. Sign in again. */
+if (S.user && !S.token) { S.user = null; try { localStorage.removeItem('bsw_user'); } catch (e) {} }
+T.likeAgain = ES ? 'Inicia sesión de nuevo para dar me gusta' : 'Sign in again to like';
 try { fetch(API + '/api/health').catch(function(){}); } catch (e) {}   // ⚡ warm the cold start
 
 function api(path, body) {
@@ -278,7 +282,17 @@ function api(path, body) {
     method: 'POST',
     headers: Object.assign({ 'Content-Type': 'application/json' }, S.token ? { Authorization: 'Bearer ' + S.token } : {}),
     body: JSON.stringify(Object.assign({ lang: ES ? 'es' : 'en' }, body))
-  }).then(function (r) { return r.json(); });
+  }).then(function (r) {
+    /* ❤️ a like is the signed-in member's (9 Oct 2026): a 401 means the login is gone, so say so and sign in again */
+    if (r.status === 401 && /^\/api\/[a-z]+(\/comments)?\/like$/.test(path)) { likeNeedsSignIn(); return { ok: false, needAuth: true }; }
+    return r.json();
+  });
+}
+function likeNeedsSignIn() {
+  S.user = null; S.token = null; S.guest = false;
+  try { localStorage.removeItem('bsw_user'); localStorage.removeItem('bsw_token'); localStorage.removeItem('bsw_guest'); } catch (e) {}
+  showLogin();
+  var e = el('lg_e'); if (e) e.textContent = T.likeAgain;
 }
 function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 function el(id){ return document.getElementById(id); }
